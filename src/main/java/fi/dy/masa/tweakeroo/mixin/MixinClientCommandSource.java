@@ -3,6 +3,8 @@ package fi.dy.masa.tweakeroo.mixin;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
+
+import fi.dy.masa.malilib.util.PositionUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,7 +27,7 @@ public abstract class MixinClientCommandSource
         if (FeatureToggle.TWEAK_TAB_COMPLETE_COORDINATE.getBooleanValue() &&
             mc.player != null && (mc.crosshairTarget == null || mc.crosshairTarget.getType() == HitResult.Type.MISS))
         {
-            BlockPos pos = new BlockPos(mc.player);
+            BlockPos pos = PositionUtils.getEntityBlockPos(mc.player);
             cir.setReturnValue(Collections.singleton(new CommandSource.RelativePosition(formatInt(pos.getX()), formatInt(pos.getY()), formatInt(pos.getZ()))));
         }
     }

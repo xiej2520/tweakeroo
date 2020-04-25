@@ -135,7 +135,7 @@ public class MiscUtils
 
     public static void copyTextFromSign(SignBlockEntity te)
     {
-        int size = te.text.length;
+        final int size = 4;
         previousSignText = new net.minecraft.text.Text[size];
 
         for (int i = 0; i < size; ++i)
@@ -148,7 +148,7 @@ public class MiscUtils
     {
         if (previousSignText != null)
         {
-            int size = Math.min(te.text.length, previousSignText.length);
+            final int size = 4;
 
             for (int i = 0; i < size; ++i)
             {
