@@ -154,4 +154,13 @@ public abstract class MixinClientPlayerInteractionManager
             cir.setReturnValue(false);
         }
     }
+
+    @Inject(method = "hasLimitedAttackSpeed", at = @At("HEAD"), cancellable = true)
+    private void overrideLimitedAttackSpeed(CallbackInfoReturnable<Boolean> cir)
+    {
+        if (FeatureToggle.TWEAK_FAST_LEFT_CLICK.getBooleanValue())
+        {
+            cir.setReturnValue(false);
+        }
+    }
 }
