@@ -50,6 +50,7 @@
         "MixinPlayerAbilities",
         "MixinPlayerEntity",
         "MixinRavagerEntity",
+        "MixinScaffoldingBlock",
         "MixinSignBlockEntity",
         "MixinSlimeBlock",
         "MixinStructureBlockBlockEntity",
