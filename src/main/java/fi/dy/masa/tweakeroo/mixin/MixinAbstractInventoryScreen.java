@@ -18,13 +18,21 @@ public abstract class MixinAbstractInventoryScreen<T extends net.minecraft.conta
         super(container, playerInventory, textComponent);
     }
 
-    @Inject(method = "applyStatusEffectOffset", at = @At("HEAD"), cancellable = true)
-    private void disableEffectRendering(CallbackInfo ci)
+    @Inject(method = "applyStatusEffectOffset", at = @At("RETURN"))
+    private void disableStatusEffectRendering1(CallbackInfo ci)
     {
         if (Configs.Disable.DISABLE_INVENTORY_EFFECTS.getBooleanValue())
         {
             this.x = (this.width - this.containerWidth) / 2;
             this.offsetGuiForEffects = false;
+        }
+    }
+
+    @Inject(method = "drawStatusEffects", at = @At("HEAD"), cancellable = true)
+    private void disableStatusEffectRendering2(CallbackInfo ci)
+    {
+        if (Configs.Disable.DISABLE_INVENTORY_EFFECTS.getBooleanValue())
+        {
             ci.cancel();
         }
     }
