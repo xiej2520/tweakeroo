@@ -43,6 +43,7 @@
         "MixinMinecraftClient",
         "MixinMobSpawnerBlockEntityRenderer",
         "MixinMobSpawnerLogic",
+        "MixinMouse",
         "MixinNewLevelPresetsScreen",
         "MixinObserverBlock",
         "MixinParticleManager",
