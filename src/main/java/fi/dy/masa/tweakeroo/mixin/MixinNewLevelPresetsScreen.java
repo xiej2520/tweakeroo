@@ -17,6 +17,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.chunk.FlatChunkGeneratorLayer;
+import net.minecraft.world.gen.feature.StructureFeature;
+import fi.dy.masa.tweakeroo.Tweakeroo;
 import fi.dy.masa.tweakeroo.config.Configs;
 import fi.dy.masa.tweakeroo.config.FeatureToggle;
 import fi.dy.masa.tweakeroo.tweaks.MiscTweaks;
@@ -81,19 +83,13 @@ public abstract class MixinNewLevelPresetsScreen
                 int biomeId = Integer.parseInt(biomeName);
                 biome = Registry.BIOME.get(biomeId);
             }
-            catch (Exception e)
+            catch (Exception ignore)
             {
-                try
-                {
-                    biome = Registry.BIOME.get(new Identifier(biomeName));
-                }
-                catch (Exception e2)
-                {
-                }
             }
 
             if (biome == null)
             {
+                Tweakeroo.logger.error("Invalid biome while parsing flat world string: '{}'", biomeName);
                 return false;
             }
 
@@ -104,12 +100,13 @@ public abstract class MixinNewLevelPresetsScreen
             {
                 item = Registry.ITEM.get(new Identifier(iconItemName));
             }
-            catch (Exception e)
+            catch (Exception ignore)
             {
             }
 
             if (item == null)
             {
+                Tweakeroo.logger.error("Invalid item for icon while parsing flat world string: '{}'", iconItemName);
                 return false;
             }
 
@@ -117,12 +114,17 @@ public abstract class MixinNewLevelPresetsScreen
 
             if (layers == null)
             {
+                Tweakeroo.logger.error("Failed to get the layers for the flat world preset");
                 return false;
             }
 
             addPreset(name, item, biome, features, layers);
 
             return true;
+        }
+        else
+        {
+            Tweakeroo.logger.error("Flat world preset string did not match the regex");
         }
 
         return false;

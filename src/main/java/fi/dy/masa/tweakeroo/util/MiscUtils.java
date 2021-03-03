@@ -30,6 +30,8 @@ import fi.dy.masa.tweakeroo.renderer.RenderUtils;
 public class MiscUtils
 {
     public static final ChunkTicketType<ChunkPos> ENDER_PEARL_TICKET = ChunkTicketType.create("ender_pearl", Comparator.comparingLong(ChunkPos::toLong), 2);
+    // name;blocks;biome;options;iconitem
+    public static final Pattern PATTERN_WORLD_PRESET = Pattern.compile("^(?<name>[a-zA-Z0-9_/&*#!=()\\[\\]{} -]+);(?<blocks>[a-z0-9_:.*,-]+);(?<biome>[a-z0-9_:.-]+);(?<options>[a-z0-9_, ()=]*);(?<icon>[a-z0-9_:.-]+)$");
 
     private static net.minecraft.text.Text[] previousSignText;
     private static String previousChatText = "";
