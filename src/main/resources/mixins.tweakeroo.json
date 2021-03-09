@@ -62,7 +62,8 @@
         "MixinWorld",
         "MixinWorldRenderer"
     ],
+    "mixinPriority": 990,
     "injectors": {
-        "defaultRequire": 1
+        "defaultRequire": 0
     }
 }
