@@ -94,8 +94,7 @@ public abstract class MixinGameRenderer
     @ModifyArg(method = "updateTargetedEntity",
                at = @At(value = "INVOKE",
                         target = "Lnet/minecraft/entity/ProjectileUtil;rayTrace(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;D)Lnet/minecraft/util/hit/EntityHitResult;"))
-    private Predicate<Entity> overrideTargetedEntityCheck(Entity entity, Vec3d startVec, Vec3d endVec,
-                                                          Box box, Predicate<Entity> predicate, double distance)
+    private Predicate<Entity> overrideTargetedEntityCheck(Predicate<Entity> predicate)
     {
         if (Configs.Disable.DISABLE_DEAD_MOB_TARGETING.getBooleanValue())
         {
