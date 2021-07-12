@@ -20,7 +20,7 @@ import net.minecraft.world.level.LevelProperties;
 import fi.dy.masa.tweakeroo.config.Configs;
 
 @Mixin(ClientWorld.class)
-public abstract class MixinClientWorld extends World
+public abstract class MixinClientWorld extends World implements IMixinClientWorld
 {
     protected MixinClientWorld(LevelProperties settings, DimensionType dimType, BiFunction<World, Dimension, ChunkManager> func, Profiler profiler)
     {

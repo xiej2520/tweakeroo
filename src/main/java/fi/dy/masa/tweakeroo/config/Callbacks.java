@@ -90,32 +90,8 @@ public class Callbacks
         Hotkeys.SWAP_ELYTRA_CHESTPLATE.getKeybind().setCallback(callbackGeneric);
         Hotkeys.TOGGLE_GRAB_CURSOR.getKeybind().setCallback(callbackGeneric);
         Hotkeys.TOOL_PICK.getKeybind().setCallback(callbackGeneric);
-        Hotkeys.ZOOM_ACTIVATE.getKeybind().setCallback((action, key) -> {
-            if (action == KeyAction.RELEASE)
-            {
-                // Refresh the rendered chunks when exiting zoom mode
-                mc.worldRenderer.scheduleTerrainUpdate();
-            }
-
-            if (key.getSettings().getActivateOn() == KeyAction.BOTH)
-            {
-                if (action == KeyAction.PRESS)
-                {
-                    // Only store it once
-                    if (mouseSensitivity == -1.0)
-                    {
-                        mouseSensitivity = mc.options.mouseSensitivity;
-                    }
-
-                    mc.options.mouseSensitivity = Math.min(mouseSensitivity, Configs.Generic.ZOOM_FOV.getDoubleValue() / 720.0);
-                }
-                else if (mouseSensitivity != -1.0)
-                {
-                    mc.options.mouseSensitivity = mouseSensitivity;
-                }
-            }
-            return false;
-        });
+        Hotkeys.WRITE_MAPS_AS_IMAGES.getKeybind().setCallback((a, k) -> MiscUtils.writeAllMapsAsImages());
+        Hotkeys.ZOOM_ACTIVATE.getKeybind().setCallback(callbackGeneric);
 
         Hotkeys.SKIP_ALL_RENDERING.getKeybind().setCallback(callbackMessage);
         Hotkeys.SKIP_WORLD_RENDERING.getKeybind().setCallback(callbackMessage);

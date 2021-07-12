@@ -1,2 +1,3 @@
 accessWidener v2 named
 accessible method net/minecraft/predicate/NumberRange$IntRange <init> (Ljava/lang/Integer;Ljava/lang/Integer;)V
+accessible field net/minecraft/client/world/ClientWorld mapStates Ljava/util/Map;
