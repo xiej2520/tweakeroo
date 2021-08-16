@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
@@ -19,8 +21,14 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.map.MapState;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -179,6 +187,58 @@ public class MiscUtils
             {
                 te.setTextOnRow(i, previousSignText[i]);
             }
+        }
+    }
+
+    public static boolean commandNearbyPets(boolean sitDown)
+    {
+        MinecraftClient mc = MinecraftClient.getInstance();
+        World world = mc.world;
+        PlayerEntity player = mc.player;
+
+        if (world != null && player != null)
+        {
+            UUID uuid = player.getUuid();
+            double centerX = player.getX();
+            double centerY = player.getY();
+            double centerZ = player.getZ();
+            double range = 6.0;
+            Box box = new Box(centerX - range, centerY - range, centerZ - range,
+                              centerX + range, centerY + range, centerZ + range);
+            Predicate<Entity> filter = (e) -> isTameableOwnedBy(e, uuid);
+
+            for (Entity entity : world.getEntities((Entity) null, box, filter))
+            {
+                if (((TameableEntity) entity).isSitting() != sitDown)
+                {
+                    rightClickEntity(entity, mc, player);
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public static boolean isTameableOwnedBy(Entity entity, UUID ownerUuid)
+    {
+        return ((entity instanceof TameableEntity) &&
+               ownerUuid.equals(((TameableEntity) entity).getOwnerUuid())) &&
+               ((TameableEntity) entity).isTamed();
+    }
+
+    public static void rightClickEntity(Entity entity, MinecraftClient mc, PlayerEntity player)
+    {
+        Hand hand = Hand.MAIN_HAND;
+        ActionResult actionResult = mc.interactionManager.interactEntityAtLocation(player, entity, new EntityHitResult(entity), hand);
+
+        if (actionResult.isAccepted() == false)
+        {
+            actionResult = mc.interactionManager.interactEntity(player, entity, hand);
+        }
+
+        if (actionResult.isAccepted() && actionResult.shouldSwingHand())
+        {
+            player.swingHand(hand);
         }
     }
 
