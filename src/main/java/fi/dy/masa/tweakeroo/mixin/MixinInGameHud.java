@@ -14,6 +14,7 @@ import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
+import fi.dy.masa.tweakeroo.config.Configs;
 import fi.dy.masa.tweakeroo.config.FeatureToggle;
 import fi.dy.masa.tweakeroo.renderer.RenderUtils;
 
@@ -58,6 +59,15 @@ public abstract class MixinInGameHud extends DrawableHelper
 
             this.playerListHud.tick(true);
             this.playerListHud.render(this.scaledWidth, scoreboard, objective);
+        }
+    }
+
+    @Inject(method = "renderScoreboardSidebar", at = @At("HEAD"), cancellable = true)
+    private void disableScoreboardRendering(CallbackInfo ci)
+    {
+        if (Configs.Disable.DISABLE_SCOREBOARD_RENDERING.getBooleanValue())
+        {
+            ci.cancel();
         }
     }
 }
