@@ -72,10 +72,8 @@ public class PlacementTweaks
     public static final ItemRestriction FAST_PLACEMENT_ITEM_RESTRICTION = new ItemRestriction();
     public static final ItemRestriction HAND_RESTOCK_RESTRICTION = new ItemRestriction();
 
-    public static void onTick()
+    public static void onTick(MinecraftClient mc)
     {
-        MinecraftClient mc = MinecraftClient.getInstance();
-
         if (GuiUtils.getCurrentScreen() == null)
         {
             if (mc.options.keyUse.isPressed())
@@ -83,7 +81,7 @@ public class PlacementTweaks
                 onUsingTick();
             }
 
-            if (mc.options.keyAttack.isPressed())
+            if (mc.player.abilities.creativeMode && mc.options.keyAttack.isPressed())
             {
                 onAttackTick(mc);
             }
