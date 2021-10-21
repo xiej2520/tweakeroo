@@ -35,6 +35,7 @@
     "accessWidener": "tweakeroo.accesswidener",
 
     "depends": {
+      "minecraft": "1.15.2",
         "malilib": ">=0.10.0-dev.20"
     },
 
