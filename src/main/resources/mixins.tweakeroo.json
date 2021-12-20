@@ -10,6 +10,7 @@
     "IMixinClientWorld",
     "IMixinCommandBlockExecutor",
     "IMixinFlatChunkGeneratorConfig",
+    "IMixinGameRenderer",
     "IMixinHorseBaseEntity",
     "IMixinSlot",
     "MixinAbstractClientPlayerEntity",
