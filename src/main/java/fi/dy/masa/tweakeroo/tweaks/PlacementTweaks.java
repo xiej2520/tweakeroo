@@ -312,6 +312,8 @@ public class PlacementTweaks
             return ActionResult.PASS;
         }
 
+        InventoryUtils.trySwapCurrentToolIfNearlyBroken();
+
         ItemStack stackPre = player.getStackInHand(hand);
 
         if (Configs.Disable.DISABLE_AXE_STRIPPING.getBooleanValue() &&
