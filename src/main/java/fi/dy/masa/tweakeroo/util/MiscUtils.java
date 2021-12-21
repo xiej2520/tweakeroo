@@ -24,6 +24,10 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.map.MapState;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Style;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.EntityHitResult;
@@ -31,13 +35,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import fi.dy.masa.malilib.gui.GuiBase;
 import fi.dy.masa.malilib.gui.Message;
 import fi.dy.masa.malilib.util.FileUtils;
 import fi.dy.masa.malilib.util.InfoUtils;
+import fi.dy.masa.malilib.util.PositionUtils;
 import fi.dy.masa.malilib.util.StringUtils;
 import fi.dy.masa.tweakeroo.Reference;
+import fi.dy.masa.tweakeroo.Tweakeroo;
 import fi.dy.masa.tweakeroo.config.Configs;
 import fi.dy.masa.tweakeroo.config.FeatureToggle;
 import fi.dy.masa.tweakeroo.config.Hotkeys;
@@ -45,6 +52,7 @@ import fi.dy.masa.tweakeroo.mixin.IMixinAxeItem;
 import fi.dy.masa.tweakeroo.mixin.IMixinClientWorld;
 import fi.dy.masa.tweakeroo.mixin.IMixinCommandBlockExecutor;
 import fi.dy.masa.tweakeroo.renderer.RenderUtils;
+import net.minecraft.world.dimension.Dimension;
 
 public class MiscUtils
 {
@@ -141,6 +149,22 @@ public class MiscUtils
     public static void setUpdateExec(CommandBlockBlockEntity te, boolean value)
     {
         ((IMixinCommandBlockExecutor) te.getCommandExecutor()).setUpdateLastExecution(value);
+    }
+
+    public static void printDeathCoordinates(MinecraftClient mc)
+    {
+        BlockPos pos = PositionUtils.getEntityBlockPos(mc.player);
+        String dim = mc.player.getEntityWorld().getDimension().getType().toString();
+        String str = StringUtils.translate("tweakeroo.message.death_coordinates",
+                                           pos.getX(), pos.getY(), pos.getZ(), dim);
+        LiteralText message = new LiteralText(str);
+        Style style = message.getStyle();
+        String coords = pos.getX() + " " + pos.getY() + " " + pos.getZ();
+        style = style.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, coords));
+        style = style.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(coords)));
+        message.setStyle(style);
+        mc.inGameHud.getChatHud().addMessage(message);
+        Tweakeroo.logger.info(str);
     }
 
     public static String getChatTimestamp()
