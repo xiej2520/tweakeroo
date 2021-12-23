@@ -16,6 +16,7 @@
     "MixinAbstractClientPlayerEntity",
     "MixinAbstractInventoryScreen",
     "MixinBackgroundRenderer",
+    "MixinBatEntity",
     "MixinBlockEntityRenderDispatcher",
     "MixinBlockItem",
     "MixinBuiltChunk",
