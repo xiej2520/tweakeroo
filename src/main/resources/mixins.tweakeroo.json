@@ -51,6 +51,7 @@
     "MixinMobSpawnerLogic",
     "MixinMouse",
     "MixinNewLevelPresetsScreen",
+    "MixinNetherPortalBlock",
     "MixinObserverBlock",
     "MixinParticleManager",
     "MixinPlayerAbilities",
