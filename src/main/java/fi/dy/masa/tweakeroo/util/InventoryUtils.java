@@ -388,7 +388,7 @@ public class InventoryUtils
 
     private static int findSuitableSlot(Container container, Predicate<ItemStack> itemTest)
     {
-        return findSuitableSlot(container, itemTest, new IntRange(0, container.slots.size() - 1));
+        return findSuitableSlot(container, itemTest, new IntRange(9, container.slots.size() - 1));
     }
 
     private static int findSuitableSlot(Container container, Predicate<ItemStack> itemTest, IntRange... ranges)
