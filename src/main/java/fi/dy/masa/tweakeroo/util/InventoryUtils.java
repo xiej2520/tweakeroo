@@ -53,10 +53,16 @@ public class InventoryUtils
     private static final List<Integer> REPAIR_MODE_SLOT_NUMBERS = new ArrayList<>();
     private static final HashSet<Item> UNSTACKING_ITEMS = new HashSet<>();
     private static final List<Integer> TOOL_SWITCHABLE_SLOTS = new ArrayList<>();
+    private static final List<Integer> TOOL_SWITCH_IGNORED_SLOTS = new ArrayList<>();
 
     public static void setToolSwitchableSlots(String configStr)
     {
         parseSlotsFromString(configStr, TOOL_SWITCHABLE_SLOTS);
+    }
+
+    public static void setToolSwitchIgnoreSlots(String configStr)
+    {
+        parseSlotsFromString(configStr, TOOL_SWITCH_IGNORED_SLOTS);
     }
 
     public static void parseSlotsFromString(String configStr, Collection<Integer> output)
@@ -65,6 +71,11 @@ public class InventoryUtils
         Pattern patternRange = Pattern.compile("^(?<start>[0-9])-(?<end>[0-9])$");
 
         output.clear();
+
+        if (configStr.trim().isEmpty())
+        {
+            return;
+        }
 
         for (String str : parts)
         {
@@ -325,7 +336,8 @@ public class InventoryUtils
         MinecraftClient mc = MinecraftClient.getInstance();
         PlayerEntity player = mc.player;
 
-        if (player != null && mc.world != null)
+        if (player != null && mc.world != null &&
+            TOOL_SWITCH_IGNORED_SLOTS.contains(player.inventory.selectedSlot) == false)
         {
             BlockState state = mc.world.getBlockState(pos);
             Container container = player.playerContainer;
