@@ -159,12 +159,14 @@ public enum FeatureToggle implements IHotkeyTogglable, IConfigNotifiable<IConfig
     @Override
     public String getConfigGuiDisplayName()
     {
+        String name = StringUtils.getTranslatedOrFallback("config.name." + this.getName().toLowerCase(), this.getName());
+
         if (this.singlePlayer)
         {
-            return GuiBase.TXT_GOLD + this.getName() + GuiBase.TXT_RST;
+            return GuiBase.TXT_GOLD + name + GuiBase.TXT_RST;
         }
 
-        return this.getName();
+        return name;
     }
 
     @Override
@@ -208,19 +210,14 @@ public enum FeatureToggle implements IHotkeyTogglable, IConfigNotifiable<IConfig
     @Override
     public String getComment()
     {
-        if (this.comment == null)
+        String comment = StringUtils.getTranslatedOrFallback("config.comment." + this.getName().toLowerCase(), this.comment);
+
+        if (comment != null && this.singlePlayer)
         {
-            return "";
+            return comment + "\n" + StringUtils.translate("tweakeroo.label.config_comment.single_player_only");
         }
 
-        if (this.singlePlayer)
-        {
-            return this.comment + "\n" + StringUtils.translate("tweakeroo.label.config_comment.single_player_only");
-        }
-        else
-        {
-            return this.comment;
-        }
+        return comment;
     }
 
     @Override
