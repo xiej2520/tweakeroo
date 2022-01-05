@@ -326,7 +326,7 @@ public class InventoryUtils
 
             if (isItemAtLowDurability(stack, minDurability))
             {
-                swapItemWithHigherDurabilityToHand(player, hand, stack, minDurability);
+                swapItemWithHigherDurabilityToHand(player, hand, stack, minDurability + 1);
             }
         }
     }
@@ -395,7 +395,7 @@ public class InventoryUtils
 
     protected static boolean hasEnoughDurability(ItemStack stack)
     {
-        return stack.getMaxDamage() - stack.getDamage() >= getMinDurability(stack);
+        return stack.getMaxDamage() - stack.getDamage() > getMinDurability(stack);
     }
 
     private static int findSuitableSlot(Container container, Predicate<ItemStack> itemTest)
@@ -471,7 +471,7 @@ public class InventoryUtils
 
     private static boolean isItemAtLowDurability(ItemStack stack, int minDurability)
     {
-        return stack.isDamageable() && stack.getDamage() >= stack.getMaxDamage() - minDurability;
+        return stack.isDamageable() && (stack.getMaxDamage() - stack.getDamage()) <= minDurability;
     }
 
     private static int getMinDurability(ItemStack stack)
