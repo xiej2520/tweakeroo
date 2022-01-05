@@ -106,11 +106,11 @@ public class GuiConfigs extends GuiConfigsBase
         }
         else if (tab == ConfigGuiTab.DISABLES)
         {
-            return ConfigOptionWrapper.createFor(YEET_LIST.stream().map(this::wrapConfig).collect(Collectors.toList()))());
+            return ConfigOptionWrapper.createFor(YEET_LIST);
         }
         else if (tab == ConfigGuiTab.TWEAKS)
         {
-            return ConfigOptionWrapper.createFor(TWEAK_LIST.stream().map(this::wrapConfig).collect(Collectors.toList()))());
+            return ConfigOptionWrapper.createFor(TWEAK_LIST.stream().map(this::wrapConfig).collect(Collectors.toList()));
         }
         else if (tab == ConfigGuiTab.GENERIC_HOTKEYS)
         {
@@ -124,14 +124,9 @@ public class GuiConfigs extends GuiConfigsBase
         return ConfigOptionWrapper.createFor(configs);
     }
 
-    protected BooleanHotkeyGuiWrapper wrapConfig(IHotkeyTogglable config)
-    {
-        return new BooleanHotkeyGuiWrapper(config.getName(), config, config);
-    }
-
     protected BooleanHotkeyGuiWrapper wrapConfig(FeatureToggle config)
     {
-        return new BooleanHotkeyGuiWrapper(config.getName(), config, config);
+        return new BooleanHotkeyGuiWrapper(config.getName(), config, config.getKeybind());
     }
 
     private static class ButtonListener implements IButtonActionListener
