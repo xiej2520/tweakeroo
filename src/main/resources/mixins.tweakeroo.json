@@ -32,6 +32,7 @@
     "MixinClientWorld",
     "MixinCloneCommand",
     "MixinCommandBlockScreen",
+    "MixinCreativeInventoryScreen",
     "MixinEditSignScreen",
     "MixinEntity",
     "MixinEntityRenderDispatcher",
