@@ -3,10 +3,14 @@ package fi.dy.masa.tweakeroo.tweaks;
 import java.util.Collection;
 import java.util.function.Consumer;
 import javax.annotation.Nullable;
+
+import fi.dy.masa.malilib.gui.Message;
+import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.gen.chunk.FlatChunkGeneratorLayer;
@@ -19,12 +23,15 @@ import fi.dy.masa.tweakeroo.config.Configs;
 import fi.dy.masa.tweakeroo.config.FeatureToggle;
 import fi.dy.masa.tweakeroo.mixin.IMixinFlatChunkGeneratorConfig;
 import fi.dy.masa.tweakeroo.util.CameraEntity;
+import fi.dy.masa.tweakeroo.util.EntityRestriction;
 import fi.dy.masa.tweakeroo.util.IMinecraftClientInvoker;
 import fi.dy.masa.tweakeroo.util.InventoryUtils;
+import fi.dy.masa.malilib.util.MessageOutputType;
 import fi.dy.masa.tweakeroo.util.PotionRestriction;
 
 public class MiscTweaks
 {
+    public static final EntityRestriction ENTITY_TYPE_ATTACK_RESTRICTION = new EntityRestriction();
     public static final PotionRestriction POTION_RESTRICTION = new PotionRestriction();
 
     private static final KeybindState KEY_STATE_ATTACK = new KeybindState(MinecraftClient.getInstance().options.keyAttack, (mc) -> ((IMinecraftClientInvoker) mc).leftClickMouseAccessor());
@@ -216,6 +223,28 @@ public class MiscTweaks
             }
         }
     }
+
+    public static boolean isEntityAllowedByAttackingRestriction(EntityType<?> type)
+    {
+        if (MiscTweaks.ENTITY_TYPE_ATTACK_RESTRICTION.isAllowed(type) == false)
+        {
+            MessageOutputType messageOutputType = (MessageOutputType) Configs.Generic.ENTITY_TYPE_ATTACK_RESTRICTION_WARN.getOptionListValue();
+
+            if (messageOutputType == MessageOutputType.MESSAGE)
+            {
+                InfoUtils.showGuiOrInGameMessage(Message.MessageType.WARNING, "tweakeroo.message.warning.entity_type_attack_restriction");
+            }
+            else if (messageOutputType == MessageOutputType.ACTIONBAR)
+            {
+                InfoUtils.printActionbarMessage("tweakeroo.message.warning.entity_type_attack_restriction");
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
 
     private static boolean potionWarningShouldInclude(StatusEffectInstance effect)
     {
