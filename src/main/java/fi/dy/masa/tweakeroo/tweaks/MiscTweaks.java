@@ -3,8 +3,6 @@ package fi.dy.masa.tweakeroo.tweaks;
 import java.util.Collection;
 import java.util.function.Consumer;
 import javax.annotation.Nullable;
-
-import fi.dy.masa.malilib.gui.Message;
 import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -16,8 +14,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.gen.chunk.FlatChunkGeneratorLayer;
 import fi.dy.masa.malilib.config.IConfigBoolean;
 import fi.dy.masa.malilib.config.IConfigInteger;
+import fi.dy.masa.malilib.gui.Message;
 import fi.dy.masa.malilib.util.GuiUtils;
 import fi.dy.masa.malilib.util.InfoUtils;
+import fi.dy.masa.malilib.util.MessageOutputType;
 import fi.dy.masa.tweakeroo.Tweakeroo;
 import fi.dy.masa.tweakeroo.config.Configs;
 import fi.dy.masa.tweakeroo.config.FeatureToggle;
@@ -26,7 +26,6 @@ import fi.dy.masa.tweakeroo.util.CameraEntity;
 import fi.dy.masa.tweakeroo.util.EntityRestriction;
 import fi.dy.masa.tweakeroo.util.IMinecraftClientInvoker;
 import fi.dy.masa.tweakeroo.util.InventoryUtils;
-import fi.dy.masa.malilib.util.MessageOutputType;
 import fi.dy.masa.tweakeroo.util.PotionRestriction;
 
 public class MiscTweaks
