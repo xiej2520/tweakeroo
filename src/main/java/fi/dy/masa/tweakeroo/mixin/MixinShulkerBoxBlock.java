@@ -13,7 +13,7 @@ import net.minecraft.world.BlockView;
 import fi.dy.masa.tweakeroo.config.Configs;
 
 @Mixin(ShulkerBoxBlock.class)
-public class MixinShulkerBoxBlock
+public abstract class MixinShulkerBoxBlock
 {
     @Inject(method = "buildTooltip", at = @At("HEAD"), cancellable = true)
     private void removeVanillaTooltip(ItemStack stack,

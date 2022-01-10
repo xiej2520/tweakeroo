@@ -14,7 +14,7 @@ import net.minecraft.world.IWorld;
 import fi.dy.masa.tweakeroo.config.Configs;
 
 @Mixin(BatEntity.class)
-public class MixinBatEntity
+public abstract class MixinBatEntity
 {
     @Inject(method = "canSpawn", at = @At("HEAD"), cancellable = true)
     private static void tweakeroo_disableBatSpawning(EntityType<BatEntity> type, IWorld world,
