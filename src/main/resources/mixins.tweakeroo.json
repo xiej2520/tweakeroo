@@ -18,6 +18,7 @@
     "MixinAbstractInventoryScreen",
     "MixinBackgroundRenderer",
     "MixinBatEntity",
+    "MixinBeaconBlockEntityRenderer",
     "MixinBlockEntityRenderDispatcher",
     "MixinBlockItem",
     "MixinBuiltChunk",
