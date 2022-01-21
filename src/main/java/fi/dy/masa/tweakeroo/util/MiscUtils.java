@@ -16,6 +16,9 @@ import net.minecraft.block.MaterialColor;
 import net.minecraft.block.entity.CommandBlockBlockEntity;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.input.Input;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.options.GameOptions;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.world.ChunkTicketType;
@@ -68,6 +71,86 @@ public class MiscUtils
     private static double lastRealYaw;
     private static double mouseSensitivity = -1.0F;
     private static boolean zoomActive;
+
+    public static void handlePlayerDeceleration()
+    {
+        MinecraftClient mc = MinecraftClient.getInstance();
+        ClientPlayerEntity player = mc.player;
+        Input input = player.input;
+
+        if (input.jumping || input.sneaking ||
+            player.forwardSpeed != 0 || player.sidewaysSpeed != 0 || player.abilities.flying == false)
+        {
+            return;
+        }
+
+        double factor = Configs.Generic.FLY_DECELERATION_FACTOR.getDoubleValue();
+        player.setVelocity(player.getVelocity().multiply(factor));
+    }
+
+    public static Vec3d calculatePlayerMotionWithDeceleration(Vec3d lastMotion,
+                                                              double rampAmount,
+                                                              double decelerationFactor,
+                                                              boolean sprinting)
+    {
+        GameOptions options = MinecraftClient.getInstance().options;
+        double forward = 0;
+        double vertical = 0;
+        double strafe = 0;
+        double speed;
+
+        if (options.keyForward.isPressed()) { forward += 1.0;  }
+        if (options.keyBack.isPressed())    { forward -= 1.0;  }
+        if (options.keyLeft.isPressed())    { strafe += 1.0;   }
+        if (options.keyRight.isPressed())   { strafe -= 1.0;   }
+        if (options.keyJump.isPressed())    { vertical += 1.0; }
+        if (options.keySneak.isPressed())   { vertical -= 1.0; }
+
+        if (forward != 0 && strafe != 0)
+        {
+            speed = Math.sqrt((strafe * strafe + forward * forward) * 0.6);
+        }
+        else
+        {
+            speed = 1.0;
+        }
+
+        double forwardRamped  = getRampedMotion(lastMotion.x, forward , rampAmount, decelerationFactor) / speed;
+        double verticalRamped = getRampedMotion(lastMotion.y, vertical, rampAmount, decelerationFactor);
+        double strafeRamped   = getRampedMotion(lastMotion.z, strafe  , rampAmount, decelerationFactor) / speed;
+
+        if (sprinting)
+        {
+            forwardRamped *= 3.0;
+        }
+
+        return new Vec3d(forwardRamped, verticalRamped, strafeRamped);
+    }
+
+    public static double getRampedMotion(double current, double input, double rampAmount, double decelerationFactor)
+    {
+        if (input != 0.0)
+        {
+            if (input < 0.0)
+            {
+                rampAmount *= -1.0;
+            }
+
+            // Immediately kill the motion when changing direction to the opposite
+            if ((input < 0.0) != (current < 0.0))
+            {
+                current = 0.0;
+            }
+
+            current = MathHelper.clamp(current + rampAmount, -1.0, 1.0);
+        }
+        else
+        {
+            current *= decelerationFactor;
+        }
+
+        return current;
+    }
 
     public static boolean isZoomActive()
     {
