@@ -21,6 +21,7 @@
     "MixinBeaconBlockEntityRenderer",
     "MixinBlockEntityRenderDispatcher",
     "MixinBlockItem",
+    "MixinBossBarHud",
     "MixinBuiltChunk",
     "MixinChatHud",
     "MixinChatScreen",
