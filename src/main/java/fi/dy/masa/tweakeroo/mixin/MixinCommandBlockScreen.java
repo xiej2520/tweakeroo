@@ -67,7 +67,7 @@ public abstract class MixinCommandBlockScreen extends AbstractCommandBlockScreen
             {
                 String name = tf.getText();
                 name = String.format("{\"CustomName\":\"{\\\"text\\\":\\\"%s\\\"}\"}", name);
-                this.minecraft.player.sendChatMessage(String.format("/data merge block %d %d %d %s", pos.getX(), pos.getY(), pos.getZ(), name));
+                this.minecraft.player.sendChatMessage(String.format("data merge block %d %d %d %s", pos.getX(), pos.getY(), pos.getZ(), name));
             }));
 
             this.updateExecValue = MiscUtils.getUpdateExec(this.blockEntity);
@@ -80,11 +80,7 @@ public abstract class MixinCommandBlockScreen extends AbstractCommandBlockScreen
                 this.updateExecValue = ! this.updateExecValue;
                 MiscUtils.setUpdateExec(this.blockEntity, this.updateExecValue);
 
-                String strBtn = getDisplayStringForCurrentStatus(this.updateExecValue);
-                button.setMessage(strBtn);
-                button.setWidth(this.font.getStringWidth(strBtn) + 10);
-
-                String cmd = String.format("/data merge block %d %d %d {\"UpdateLastExecution\":%s}",
+                String cmd = String.format("data merge block %d %d %d {\"UpdateLastExecution\":%s}",
                         pos.getX(), pos.getY(), pos.getZ(), this.updateExecValue ? "1b" : "0b");
                 this.minecraft.player.sendChatMessage(cmd);
             });
