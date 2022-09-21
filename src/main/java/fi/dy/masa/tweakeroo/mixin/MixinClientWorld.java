@@ -18,6 +18,7 @@ import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.level.LevelProperties;
 import fi.dy.masa.tweakeroo.config.Configs;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ClientWorld.class)
 public abstract class MixinClientWorld extends World implements IMixinClientWorld
@@ -80,6 +81,17 @@ public abstract class MixinClientWorld extends World implements IMixinClientWorl
         if (Configs.Disable.DISABLE_CHUNK_RENDERING.getBooleanValue())
         {
             ci.cancel();
+        }
+    }
+
+    @Inject(method = "getSkyDarknessHeight", at = @At("HEAD"), cancellable = true)
+    private void tweakeroo_overrideSkyDarknessHeight(CallbackInfoReturnable<Double> cir)
+    {
+        // Disable the dark sky effect in normal situations
+        // by moving the y threshold below the bottom of the world
+        if (Configs.Disable.DISABLE_SKY_DARKNESS.getBooleanValue())
+        {
+            cir.setReturnValue(-2.0);
         }
     }
 }
