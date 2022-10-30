@@ -72,6 +72,7 @@
     "MixinThrownEntity",
     "MixinTradeOffer",
     "MixinUpdateStructureBlockC2SPacket",
+    "MixinWindow",
     "MixinWorld",
     "MixinWorldRenderer"
   ],
