@@ -2,6 +2,7 @@ package fi.dy.masa.tweakeroo.renderer;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -26,6 +27,8 @@ import net.minecraft.world.World;
 import fi.dy.masa.malilib.util.EntityUtils;
 import fi.dy.masa.malilib.util.GuiUtils;
 import fi.dy.masa.tweakeroo.config.Configs;
+import fi.dy.masa.tweakeroo.config.FeatureToggle;
+import fi.dy.masa.tweakeroo.data.ServerDataSyncer;
 import fi.dy.masa.tweakeroo.mixin.IMixinHorseBaseEntity;
 import fi.dy.masa.tweakeroo.util.MiscUtils;
 import fi.dy.masa.tweakeroo.util.RayTraceUtils;
@@ -141,10 +144,25 @@ public class RenderUtils
             }
 
             inv = fi.dy.masa.malilib.util.InventoryUtils.getInventory(world, pos);
+            if (world.isClient && world.getBlockState(pos).getBlock() instanceof BlockEntityProvider
+                    && FeatureToggle.TWEAK_SERVER_DATA_SYNC.getBooleanValue())
+            {
+                inv = ServerDataSyncer.getInstance().getBlockInventory(world, pos);
+            }
         }
         else if (trace.getType() == HitResult.Type.ENTITY)
         {
             Entity entity = ((EntityHitResult) trace).getEntity();
+
+            if (entity.world.isClient &&
+                FeatureToggle.TWEAK_SERVER_DATA_SYNC.getBooleanValue())
+            {
+                Entity serverEntity = ServerDataSyncer.getInstance().getServerEntity(entity);
+                if (serverEntity != null)
+                {
+                    entity = serverEntity;
+                }
+            }
 
             if (entity instanceof LivingEntity)
             {

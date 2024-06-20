@@ -14,6 +14,7 @@ import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.packet.s2c.play.CombatEventS2CPacket;
 import net.minecraft.network.packet.s2c.play.ContainerSlotUpdateS2CPacket;
 import fi.dy.masa.tweakeroo.config.FeatureToggle;
+import fi.dy.masa.tweakeroo.data.ServerDataSyncer;
 import fi.dy.masa.tweakeroo.tweaks.PlacementTweaks;
 import fi.dy.masa.tweakeroo.util.MiscUtils;
 
@@ -69,6 +70,19 @@ public abstract class MixinClientPlayNetworkHandler
                     PlacementTweaks.onProcessRightClickPost(this.client.player, hand);
                 }
             }
+        }
+    }
+
+    @Inject(
+            method = "onCommandTree",
+            at = @At("RETURN")
+    )
+    private void onCommandTree(CallbackInfo ci)
+    {
+        if (FeatureToggle.TWEAK_SERVER_DATA_SYNC.getBooleanValue())
+        {
+            // when the player becomes OP, the server sends the command tree to the client
+            ServerDataSyncer.getInstance().recheckOpStatus();
         }
     }
 }
