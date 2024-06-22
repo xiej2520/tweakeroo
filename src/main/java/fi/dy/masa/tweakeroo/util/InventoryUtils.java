@@ -6,12 +6,16 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.common.collect.Multimap;
 import fi.dy.masa.tweakeroo.mixin.IMixinMiningToolItem;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
@@ -25,6 +29,8 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ArmorItem;
@@ -839,15 +845,72 @@ public class InventoryUtils
 
         Predicate<ItemStack> stackFilterChestPlate = (s) -> s.getItem() instanceof ArmorItem && ((ArmorItem) s.getItem()).getSlotType() == EquipmentSlot.CHEST;
         Predicate<ItemStack> stackFilterElytra = (s) -> s.getItem() instanceof ElytraItem && ElytraItem.isUsable(s);
-        Predicate<ItemStack> stackFilter = (currentStack.isEmpty() || stackFilterChestPlate.test(currentStack)) ? stackFilterElytra : stackFilterChestPlate;
+        boolean switchingToElytra = currentStack.isEmpty() || stackFilterChestPlate.test(currentStack);
+        Predicate<ItemStack> stackFilter = switchingToElytra ? stackFilterElytra : stackFilterChestPlate;
         Predicate<ItemStack> finalFilter = (s) -> s.isEmpty() == false && stackFilter.test(s) && s.getDamage() < s.getMaxDamage() - 10;
-        int targetSlot = findSuitableSlot(container, finalFilter);
+
+        int targetSlot = findSlotWithBestItemMatch(container, (testedStack, previousBestMatch) -> {
+            if (!finalFilter.test(testedStack)) return false;
+            if (!finalFilter.test(previousBestMatch)) return true;
+            if (switchingToElytra)
+            {
+                if (getEnchantmentLevel(testedStack, Enchantments.UNBREAKING) < getEnchantmentLevel(previousBestMatch, Enchantments.UNBREAKING))
+                {
+                    return false;
+                }
+                if (testedStack.getDamage() > previousBestMatch.getDamage())
+                {
+                     return false;
+                }
+            }
+            else
+            {
+                if (getArmorAndArmorToughnessValue(previousBestMatch, 1, EquipmentSlot.CHEST) > getArmorAndArmorToughnessValue(testedStack, 1, EquipmentSlot.CHEST))
+                {
+                    return false;
+                }
+                if (getEnchantmentLevel(previousBestMatch, Enchantments.PROTECTION) > getEnchantmentLevel(testedStack, Enchantments.PROTECTION))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }, new IntRange(9, container.slots.size() - 1));
 
         if (targetSlot >= 0)
         {
             //targetSlots.sort();
             swapItemToEquipmentSlot(player, EquipmentSlot.CHEST, targetSlot);
         }
+    }
+
+    private static double getArmorAndArmorToughnessValue(ItemStack stack, double base, EquipmentSlot slot)
+    {
+        double total = base;
+
+        for (Map.Entry<String, EntityAttributeModifier> entry : stack.getAttributeModifiers(slot).entries()) {
+            EntityAttributeModifier modifier = entry.getValue();
+            if (Objects.equals(entry.getKey(), EntityAttributes.ARMOR.getId()) || Objects.equals(entry.getKey(), EntityAttributes.ARMOR_TOUGHNESS.getId())) {
+                switch (modifier.getOperation())
+                {
+                    case ADDITION:
+                        total += modifier.getAmount();
+                        break;
+                    case MULTIPLY_BASE:
+                        total += modifier.getAmount() * base;
+                        break;
+                    case MULTIPLY_TOTAL:
+                        total += modifier.getAmount() * total;
+                        break;
+                    default:
+                        throw new IllegalArgumentException();
+                }
+
+            }
+
+        }
+        return total;
     }
 
     /**
@@ -919,7 +982,7 @@ public class InventoryUtils
         }
     }
 
-    private static void swapItemToEquipmentSlot(PlayerEntity player, EquipmentSlot type, int sourceSlotNumber)
+    public static void swapItemToEquipmentSlot(PlayerEntity player, EquipmentSlot type, int sourceSlotNumber)
     {
         if (sourceSlotNumber != -1 && player.container == player.playerContainer)
         {
