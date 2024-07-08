@@ -74,7 +74,6 @@ public abstract class MixinClientPlayNetworkHandler
         }
     }
 
-
     @Inject(
             method = "getActiveTotemOfUndying",
             at = @At(value = "RETURN", ordinal = 0)

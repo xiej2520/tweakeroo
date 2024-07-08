@@ -1,5 +1,6 @@
 package fi.dy.masa.tweakeroo.mixin;
 
+import net.minecraft.entity.data.TrackedData;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -37,7 +38,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 
     @Shadow public float lastNauseaStrength;
     @Shadow public float nextNauseaStrength;
-
+    @Shadow private boolean field_3939; // falling
     private final DummyMovementInput dummyMovementInput = new DummyMovementInput(null);
     @Unique private Input realInput;
     @Unique private float realNextNauseaStrength;
@@ -165,30 +166,34 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         }
     }
 
-    @Inject(method = "tickMovement", at = @At("RETURN"))
-    private void onMovementEnd(CallbackInfo ci)
+
+    @Inject(method = "onTrackedDataSet", at = @At("RETURN"))
+    private void onStopFlying(TrackedData<?> data, CallbackInfo ci)
     {
         if (FeatureToggle.TWEAK_AUTO_SWITCH_ELYTRA.getBooleanValue())
         {
-            if (!this.isFallFlying() && this.getEquippedStack(EquipmentSlot.CHEST).getItem() == Items.ELYTRA)
+            if (FLAGS.equals(data) && this.field_3939)
             {
-                if (!this.autoSwitchElytraChestplate.isEmpty())
+                if (!this.isFallFlying() && this.getEquippedStack(EquipmentSlot.CHEST).getItem() == Items.ELYTRA)
                 {
-                    if (this.inventory.getCursorStack().isEmpty())
+                    if (!this.autoSwitchElytraChestplate.isEmpty() && this.autoSwitchElytraChestplate.getItem() != Items.ELYTRA)
                     {
-                        int targetSlot = InventoryUtils.findSlotWithItem(this.playerContainer, this.autoSwitchElytraChestplate, true, false);
-
-                        if (targetSlot >= 0)
+                        if (this.inventory.getCursorStack().isEmpty())
                         {
-                            InventoryUtils.swapItemToEquipmentSlot(this, EquipmentSlot.CHEST, targetSlot);
-                            this.autoSwitchElytraChestplate = ItemStack.EMPTY;
+                            int targetSlot = InventoryUtils.findSlotWithItem(this.playerContainer, this.autoSwitchElytraChestplate, true, false);
+
+                            if (targetSlot >= 0)
+                            {
+                                InventoryUtils.swapItemToEquipmentSlot(this, EquipmentSlot.CHEST, targetSlot);
+                                this.autoSwitchElytraChestplate = ItemStack.EMPTY;
+                            }
                         }
                     }
-                }
-                else
-                {
-                    // if cached previous item is empty, try to swap back to the default chest plate.
-                    InventoryUtils.swapElytraWithChestPlate(this);
+                    else
+                    {
+                        // if cached previous item is empty, try to swap back to the default chest plate.
+                        InventoryUtils.swapElytraWithChestPlate(this);
+                    }
                 }
             }
         }
