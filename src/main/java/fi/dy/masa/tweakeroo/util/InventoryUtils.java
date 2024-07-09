@@ -947,9 +947,14 @@ public class InventoryUtils
         return isHotbarSlot(slot.id);
     }
 
-    private static boolean isHotbarSlot(int slot)
+    public static boolean isHotbarSlot(int slot)
     {
         return slot >= 36 && slot < (36 + PlayerInventory.getHotbarSize());
+    }
+
+    public static boolean isOffhandSlot(int slot)
+    {
+        return slot == (36 + PlayerInventory.getHotbarSize());
     }
 
     private static void swapItemToHand(PlayerEntity player, Hand hand, int slotNumber)
@@ -986,14 +991,18 @@ public class InventoryUtils
     {
         if (sourceSlotNumber != -1 && player.container == player.playerContainer)
         {
-            MinecraftClient mc = MinecraftClient.getInstance();
-            Container container = player.playerContainer;
             int equipmentSlotNumber = getSlotNumberForEquipmentType(type, player);
-
-            mc.interactionManager.clickSlot(container.syncId, sourceSlotNumber, 0, SlotActionType.SWAP, mc.player);
-            mc.interactionManager.clickSlot(container.syncId, equipmentSlotNumber, 0, SlotActionType.SWAP, mc.player);
-            mc.interactionManager.clickSlot(container.syncId, sourceSlotNumber, 0, SlotActionType.SWAP, mc.player);
+            swapSlots(player, sourceSlotNumber, equipmentSlotNumber);
         }
+    }
+
+    public static void swapSlots(PlayerEntity player, int slotNum, int otherSlot)
+    {
+        MinecraftClient mc = MinecraftClient.getInstance();
+        Container container = player.container;
+        mc.interactionManager.clickSlot(container.syncId, slotNum, 0, SlotActionType.SWAP, player);
+        mc.interactionManager.clickSlot(container.syncId, otherSlot, 0, SlotActionType.SWAP, player);
+        mc.interactionManager.clickSlot(container.syncId, slotNum, 0, SlotActionType.SWAP, player);
     }
 
     private static void swapToolToHand(int slotNumber, MinecraftClient mc)

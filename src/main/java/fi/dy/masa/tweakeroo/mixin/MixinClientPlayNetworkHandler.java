@@ -1,13 +1,11 @@
 package fi.dy.masa.tweakeroo.mixin;
 
-import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
 import net.minecraft.util.Hand;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -18,14 +16,12 @@ import net.minecraft.network.packet.s2c.play.ContainerSlotUpdateS2CPacket;
 import fi.dy.masa.tweakeroo.config.FeatureToggle;
 import fi.dy.masa.tweakeroo.tweaks.PlacementTweaks;
 import fi.dy.masa.tweakeroo.util.MiscUtils;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ClientPlayNetworkHandler.class)
 public abstract class MixinClientPlayNetworkHandler
 {
 
     @Shadow private final MinecraftClient client;
-    @Unique private static Hand totemOfUndyingRestockHand;
 
     protected MixinClientPlayNetworkHandler(MinecraftClient client) {
         this.client = client;
@@ -43,25 +39,6 @@ public abstract class MixinClientPlayNetworkHandler
         }
     }
 
-
-    @Inject(method = "onContainerSlotUpdate", at = @At("RETURN"))
-    private void afterHandleSetSlot(ContainerSlotUpdateS2CPacket packet, CallbackInfo ci)
-    {
-        if (FeatureToggle.TWEAK_HAND_RESTOCK.getBooleanValue() && totemOfUndyingRestockHand != null)
-        {
-            if (this.client.player == null)
-            {
-                totemOfUndyingRestockHand = null;
-            }
-            else if (this.client.player.getStackInHand(totemOfUndyingRestockHand).isEmpty())
-            {
-                PlacementTweaks.tryRestockHand(this.client.player, totemOfUndyingRestockHand, Items.TOTEM_OF_UNDYING.getStackForRender());
-                totemOfUndyingRestockHand = null;
-            }
-        }
-    }
-
-
     @Inject(method = "onCombatEvent", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/MinecraftClient;openScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
     private void onPlayerDeath(CombatEventS2CPacket packetIn, CallbackInfo ci)
@@ -75,15 +52,23 @@ public abstract class MixinClientPlayNetworkHandler
     }
 
     @Inject(
-            method = "getActiveTotemOfUndying",
-            at = @At(value = "RETURN", ordinal = 0)
+        method = "onEntityStatus",
+        at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;getActiveTotemOfUndying(Lnet/minecraft/entity/player/PlayerEntity;)Lnet/minecraft/item/ItemStack;")
     )
-    private static void onPlayerUseTotemOfUndying(PlayerEntity player, CallbackInfoReturnable<ItemStack> cir, @Local Hand hand)
+    private void onPlayerUseTotemOfUndying(EntityStatusS2CPacket packet, CallbackInfo ci)
     {
         if (FeatureToggle.TWEAK_HAND_RESTOCK.getBooleanValue())
         {
-            totemOfUndyingRestockHand = hand;
-            PlacementTweaks.cacheStackInHand(hand);
+            for (Hand hand : Hand.values())
+            {
+                if (this.client.player.getStackInHand(hand).getItem() == Items.TOTEM_OF_UNDYING)
+                {
+                    PlacementTweaks.cacheStackInHand(hand);
+                    // the slot update packet goes after this packet, let's set it to empty and restock
+                    this.client.player.setStackInHand(hand, ItemStack.EMPTY);
+                    PlacementTweaks.onProcessRightClickPost(this.client.player, hand);
+                }
+            }
         }
     }
 }
