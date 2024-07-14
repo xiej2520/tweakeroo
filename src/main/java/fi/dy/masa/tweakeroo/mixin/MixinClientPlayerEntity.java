@@ -150,7 +150,8 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
             // or not an Elytra to be swapped back.
             //
             // !isOnGround(): Minecraft also check elytra even if the player is on the ground, skip it.
-            if (!this.onGround
+            // !isSwimming(): Check if the Player is swimming so, it doesn't perform the Elytra Swap while underwater.
+            if (!this.onGround && !this.isSwimming()
                 && (this.getEquippedStack(EquipmentSlot.CHEST).getItem() != Items.ELYTRA
                 || (this.getEquippedStack(EquipmentSlot.CHEST).getDamage() > this.getEquippedStack(EquipmentSlot.CHEST).getMaxDamage() - 10)
                 && (!this.getEquippedStack(EquipmentSlot.CHEST).isEmpty() || this.autoSwitchElytraChestplate.getItem() == Items.ELYTRA)))
