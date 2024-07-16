@@ -46,7 +46,6 @@
     "MixinHeldItemRenderer",
     "MixinInGameHud",
     "MixinItem",
-    "MixinItemEntity",
     "MixinItemGroup",
     "MixinItemStack",
     "MixinKeyboardInput",
