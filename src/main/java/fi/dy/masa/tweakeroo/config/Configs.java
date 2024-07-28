@@ -229,6 +229,7 @@ public class Configs implements IConfigHandler
         public static final ConfigOptionList ENTITY_TYPE_ATTACK_RESTRICTION_LIST_TYPE = new ConfigOptionList("entityTypeAttackRestrictionListType", ListType.BLACKLIST, "The restriction list type for the Entity Type Attack Restriction tweak");
         public static final ConfigStringList ENTITY_TYPE_ATTACK_RESTRICTION_BLACKLIST = new ConfigStringList("entityTypeAttackRestrictionBlackList", ImmutableList.of("minecraft:villager"), "The entities that are NOT allowed to be attacked while the Entity Attack Restriction tweak is enabled,\nif the entityAttackRestrictionListType is set to Black List");
         public static final ConfigStringList ENTITY_TYPE_ATTACK_RESTRICTION_WHITELIST = new ConfigStringList("entityTypeAttackRestrictionWhiteList", ImmutableList.of(), "The only entities that can be attacked while the Entity Attack Restriction tweak is enabled,\nif the entityAttackRestrictionListType is set to White List");
+        public static final ConfigStringList PREFER_SILK_TOUCH                  = new ConfigStringList("preferSilkTouch", ImmutableList.of("minecraft:ender_chest"), "When using the automatic tool switch, use Silk Touch tools for these if there is a Silk Touch tool available");
         public static final ConfigStringList ENTITY_WEAPON_MAPPING              = new ConfigStringList("entityWeaponMapping", ImmutableList.of("<default> => minecraft:diamond_sword, minecraft:golden_sword, minecraft:iron_sword, minecraft:stone_sword, minecraft:wooden_sword", "minecraft:end_crystal, minecraft:item_frame, minecraft:leash_knot => <ignore>", "minecraft:minecart, minecraft:chest_minecart, minecraft:furnace_minecart, minecraft:hopper_minecart, minecraft:hopper_minecart, minecraft:spawner_minecart, minecraft:tnt_minecart, minecraft:boat=> minecraft:diamond_axe, minecraft:golden_axe, minecraft:iron_axe, minecraft:stone_axe, minecraft:wooden_axe"), "Mapping for what weapon should be used with the\n'tweakWeaponSwitch' tweak.\n'<default>' will be used when no other mapping is defined.\n'<ignore>' will not trigger a weapon switch.");
         public static final ConfigOptionList FAST_PLACEMENT_ITEM_LIST_TYPE      = new ConfigOptionList("fastPlacementItemListType", ListType.BLACKLIST, "The item restriction type for the Fast Block Placement tweak");
         public static final ConfigStringList FAST_PLACEMENT_ITEM_BLACKLIST      = new ConfigStringList("fastPlacementItemBlackList", ImmutableList.of("minecraft:ender_chest", "minecraft:white_shulker_box"), "The items that are NOT allowed to be used for the Fast Block Placement tweak,\nif the fastPlacementItemListType is set to Black List");
@@ -257,6 +258,7 @@ public class Configs implements IConfigHandler
                 ENTITY_TYPE_ATTACK_RESTRICTION_LIST_TYPE,
                 ENTITY_TYPE_ATTACK_RESTRICTION_BLACKLIST,
                 ENTITY_TYPE_ATTACK_RESTRICTION_WHITELIST,
+                PREFER_SILK_TOUCH,
                 ENTITY_WEAPON_MAPPING,
                 FAST_PLACEMENT_ITEM_LIST_TYPE,
                 FAST_RIGHT_CLICK_BLOCK_LIST_TYPE,
@@ -430,6 +432,7 @@ public class Configs implements IConfigHandler
         InventoryUtils.setRepairModeSlots(Lists.REPAIR_MODE_SLOTS.getStrings());
         InventoryUtils.setUnstackingItems(Lists.UNSTACKING_ITEMS.getStrings());
         InventoryUtils.setWeaponMapping(Lists.ENTITY_WEAPON_MAPPING.getStrings());
+        InventoryUtils.setPreferSilkTouchList(Lists.PREFER_SILK_TOUCH.getStrings());
 
         PlacementTweaks.BLOCK_TYPE_BREAK_RESTRICTION.setListType((ListType) Lists.BLOCK_TYPE_BREAK_RESTRICTION_LIST_TYPE.getOptionListValue());
         PlacementTweaks.BLOCK_TYPE_BREAK_RESTRICTION.setListContents(

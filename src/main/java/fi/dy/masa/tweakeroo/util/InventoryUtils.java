@@ -65,6 +65,7 @@ public class InventoryUtils
     private static final HashSet<Item> UNSTACKING_ITEMS = new HashSet<>();
     private static final List<Integer> TOOL_SWITCHABLE_SLOTS = new ArrayList<>();
     private static final List<Integer> TOOL_SWITCH_IGNORED_SLOTS = new ArrayList<>();
+    private static final List<String> PREFER_SILK_TOUCH = new ArrayList<>();
     private static final HashMap<EntityType<?>, HashSet<Item>> WEAPON_MAPPING = new HashMap<>();
 
     public static void setToolSwitchableSlots(String configStr)
@@ -75,6 +76,12 @@ public class InventoryUtils
     public static void setToolSwitchIgnoreSlots(String configStr)
     {
         parseSlotsFromString(configStr, TOOL_SWITCH_IGNORED_SLOTS);
+    }
+
+    public static void setPreferSilkTouchList(List<String> names)
+    {
+        PREFER_SILK_TOUCH.clear();
+        PREFER_SILK_TOUCH.addAll(names);
     }
 
     public static void parseSlotsFromString(String configStr, Collection<Integer> output)
@@ -554,6 +561,16 @@ public class InventoryUtils
 
         if (testedStack.isEmpty() == false)
         {
+            if (PREFER_SILK_TOUCH.contains(Registry.BLOCK.getId(state.getBlock()).toString()))
+            {
+                if (getEnchantmentLevel(testedStack, Enchantments.SILK_TOUCH) > 0 &&
+                    getEnchantmentLevel(previousTool, Enchantments.SILK_TOUCH) <= 0 &&
+                    testedStack.isEffectiveOn(state))
+                {
+                    return true;
+                }
+            }
+
             if (getBaseBlockBreakingSpeed(testedStack, state) > getBaseBlockBreakingSpeed(previousTool, state))
             {
                 return true;
