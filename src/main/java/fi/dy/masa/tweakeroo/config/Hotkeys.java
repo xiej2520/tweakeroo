@@ -28,6 +28,8 @@ public class Hotkeys
     public static final ConfigHotkey FLY_PRESET_4                       = new ConfigHotkey("flyPreset4",                        "",     "Switch to fly preset 4");
     public static final ConfigHotkey FLY_PRESET_5                       = new ConfigHotkey("flyPreset5",                        "",     "Switch to fly preset 5");
     public static final ConfigHotkey FLY_PRESET_6                       = new ConfigHotkey("flyPreset6",                        "",     "Switch to fly preset 6");
+    public static final ConfigHotkey FLY_INCREMENT_1                    = new ConfigHotkey("flyIncrement1",                     "",     "Change fly speed by increment 1");
+    public static final ConfigHotkey FLY_INCREMENT_2                    = new ConfigHotkey("flyIncrement2",                     "",     "Change fly speed by increment 2");
     public static final ConfigHotkey FREE_CAMERA_PLAYER_INPUTS          = new ConfigHotkey("freeCameraPlayerInputs",            "",     "Toggle the Generic -> freeCameraPlayerInputs option");
     public static final ConfigHotkey FREE_CAMERA_PLAYER_MOVEMENT        = new ConfigHotkey("freeCameraPlayerMovement",          "",     "Toggle the Generic -> freeCameraPlayerMovement option");
     public static final ConfigHotkey HOTBAR_SCROLL                      = new ConfigHotkey("hotbarScroll",                      "",     KeybindSettings.RELEASE_ALLOW_EXTRA, "The key to hold to allow scrolling the hotbar\nthrough the player inventory rows");
@@ -76,6 +78,8 @@ public class Hotkeys
             FLY_PRESET_4,
             FLY_PRESET_5,
             FLY_PRESET_6,
+            FLY_INCREMENT_1,
+            FLY_INCREMENT_2,
             FREE_CAMERA_PLAYER_INPUTS,
             FREE_CAMERA_PLAYER_MOVEMENT,
             HOTBAR_SCROLL,

@@ -65,6 +65,8 @@ public class Configs implements IConfigHandler
         public static final ConfigDouble        FLY_SPEED_PRESET_4                  = new ConfigDouble      ("flySpeedPreset4", 0.32, 0, 4, "The fly speed for preset 4");
         public static final ConfigDouble        FLY_SPEED_PRESET_5                  = new ConfigDouble      ("flySpeedPreset5", 0.64, 0, 4, "The fly speed for preset 5");
         public static final ConfigDouble        FLY_SPEED_PRESET_6                  = new ConfigDouble      ("flySpeedPreset6", 1.28, 0, 4, "The fly speed for preset 6");
+        public static final ConfigDouble        FLY_SPEED_INCREMENT_1               = new ConfigDouble      ("flySpeedIncrement1", 0.128, -4, 4, "How much the fly speed changes for increment 1");
+        public static final ConfigDouble        FLY_SPEED_INCREMENT_2               = new ConfigDouble      ("flySpeedIncrement2", -0.128, -4, 4, "How much the fly speed changes for increment 2");
         public static final ConfigBoolean       FREE_CAMERA_PLAYER_INPUTS           = new ConfigBoolean     ("freeCameraPlayerInputs", false, "When enabled, the attacks and use actions\n(ie. left and right clicks) in Free Camera mode are\nlet through to the actual player.");
         public static final ConfigBoolean       FREE_CAMERA_PLAYER_MOVEMENT         = new ConfigBoolean     ("freeCameraPlayerMovement", false, "When enabled, the movement inputs in the Free Camera mode\nwill move the actual client player instead of the camera");
         public static final ConfigDouble        GAMMA_OVERRIDE_VALUE                = new ConfigDouble      ("gammaOverrideValue", 16, 0, 32, "The gamma value to use when the override option is enabled");
@@ -171,6 +173,8 @@ public class Configs implements IConfigHandler
                 FLY_SPEED_PRESET_4,
                 FLY_SPEED_PRESET_5,
                 FLY_SPEED_PRESET_6,
+                FLY_SPEED_INCREMENT_1,
+                FLY_SPEED_INCREMENT_2,
                 GAMMA_OVERRIDE_VALUE,
                 HAND_RESTOCK_PRE_THRESHOLD,
                 HOTBAR_SLOT_CYCLE_MAX,
