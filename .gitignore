@@ -5,5 +5,8 @@ build/
 eclipse/
 logs/
 .classpath
+.idea
 .project
+.share
+run/
 build.number
