@@ -56,7 +56,7 @@ public abstract class MixinClientWorld extends World
         }
     }
 
-    @Inject(method = "scheduleBlockRerenderIfNeeded", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "checkBlockRerender", at = @At("HEAD"), cancellable = true)
     private void disableChunkReRenders(BlockPos pos, BlockState old, BlockState updated, CallbackInfo ci)
     {
         if (Configs.Disable.DISABLE_CHUNK_RENDERING.getBooleanValue())
