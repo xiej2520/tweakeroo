@@ -7,6 +7,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.ingame.ContainerScreen;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
@@ -252,15 +253,20 @@ public class RenderUtils
         {
             LivingEntity living = (LivingEntity) entity;
             final int resp = EnchantmentHelper.getRespiration(living);
+            final int aqua = EnchantmentHelper.getEquipmentLevel(Enchantments.AQUA_AFFINITY, living);
             // The original fog value of 2.0F is way too much to reduce gradually from.
             // You would only be able to see meaningfully with the full reduction.
             final float baseFog = 0.6F;
             final float respDecrement = (baseFog * 0.75F) / 3F - 0.02F;
             float fog = baseFog;
 
-            if (living.hasStatusEffect(StatusEffects.WATER_BREATHING))
+            if (living.hasStatusEffect(StatusEffects.FIRE_RESISTANCE))
             {
                 fog -= baseFog * 0.4F;
+            }
+
+            if (aqua > 0) {
+                fog -= respDecrement;
             }
 
             if (resp > 0)
