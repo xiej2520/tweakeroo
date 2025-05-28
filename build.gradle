@@ -22,6 +22,10 @@ dependencies {
     modCompileOnly "com.terraformersmc:modmenu:${project.mod_menu_version}"
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/tweakeroo.accesswidener")
+}
+
 compileJava {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8

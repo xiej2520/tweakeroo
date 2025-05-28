@@ -32,6 +32,8 @@
         "mixins.tweakeroo.json"
     ],
 
+    "accessWidener": "tweakeroo.accesswidener",
+
     "depends": {
         "malilib": ">=0.10.0-dev.20"
     },
