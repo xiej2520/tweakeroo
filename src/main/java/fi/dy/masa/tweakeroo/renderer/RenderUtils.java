@@ -74,10 +74,12 @@ public class RenderUtils
             fi.dy.masa.malilib.render.RenderUtils.bindTexture(ContainerScreen.BACKGROUND_TEXTURE);
             fi.dy.masa.malilib.render.RenderUtils.drawTexturedRect(x - 1, y - 1, 7, 83, 9 * 18, 3 * 18);
 
+            textRenderer.drawWithShadow("1", x - 10, y +  4, 0xFFFFFF);
+            textRenderer.drawWithShadow("2", x - 10, y + 22, 0xFFFFFF);
+            textRenderer.drawWithShadow("3", x - 10, y + 40, 0xFFFFFF);
+
             for (int row = 1; row <= 3; row++)
             {
-                textRenderer.drawWithShadow(String.valueOf(row), x - 10, y + 4, 0xFFFFFF);
-
                 for (int column = 0; column < 9; column++)
                 {
                     ItemStack stack = player.inventory.getInvStack(row * 9 + column);

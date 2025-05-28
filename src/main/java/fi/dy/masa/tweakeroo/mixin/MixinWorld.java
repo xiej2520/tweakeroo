@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
@@ -17,19 +16,12 @@ import net.minecraft.world.World;
 import fi.dy.masa.tweakeroo.config.Configs;
 
 @Mixin(World.class)
-public abstract class MixinWorld
-{
-    @Shadow
-    @Final
-    public List<BlockEntity> blockEntities;
+public abstract class MixinWorld {
+    @Shadow @Final public List<BlockEntity> blockEntities;
 
-    @Shadow
-    @Final
-    public List<BlockEntity> tickingBlockEntities;
+    @Shadow @Final public List<BlockEntity> tickingBlockEntities;
 
-    @Shadow
-    @Final
-    private List<BlockEntity> unloadedBlockEntities;
+    @Shadow @Final protected List<BlockEntity> unloadedBlockEntities;
 
     @Inject(method = "tickEntity(Ljava/util/function/Consumer;Lnet/minecraft/entity/Entity;)V", at = @At("HEAD"), cancellable = true)
     private void preventEntityTicking(Consumer<Entity> consumer, Entity entityIn, CallbackInfo ci)
@@ -40,16 +32,13 @@ public abstract class MixinWorld
         }
     }
 
-    @Redirect(method = "tickBlockEntities",
-                at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/BlockEntity;hasWorld()Z", ordinal = 0))
-    private boolean preventTileEntityTicking(BlockEntity te)
+    @Inject(method = "tickBlockEntities", at = @At("HEAD"), cancellable = true)
+    private void disableBlockEntityTicking(CallbackInfo ci)
     {
         if (Configs.Disable.DISABLE_TILE_ENTITY_TICKING.getBooleanValue())
         {
-            return false;
+            ci.cancel();
         }
-
-        return te.hasWorld();
     }
 
     @Inject(method = "tickBlockEntities",
