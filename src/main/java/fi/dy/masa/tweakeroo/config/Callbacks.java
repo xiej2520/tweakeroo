@@ -65,6 +65,8 @@ public class Callbacks
         Hotkeys.FLY_PRESET_2.getKeybind().setCallback(callbackGeneric);
         Hotkeys.FLY_PRESET_3.getKeybind().setCallback(callbackGeneric);
         Hotkeys.FLY_PRESET_4.getKeybind().setCallback(callbackGeneric);
+        Hotkeys.FLY_PRESET_5.getKeybind().setCallback(callbackGeneric);
+        Hotkeys.FLY_PRESET_6.getKeybind().setCallback(callbackGeneric);
         Hotkeys.FREE_CAMERA_PLAYER_INPUTS.getKeybind().setCallback((action, key) -> {
             IConfigBoolean config = Configs.Generic.FREE_CAMERA_PLAYER_INPUTS;
             config.toggleBooleanValue();
@@ -317,6 +319,16 @@ public class Callbacks
             else if (key == Hotkeys.FLY_PRESET_4.getKeybind())
             {
                 this.setFlySpeedPreset(3);
+                return true;
+            }
+            else if (key == Hotkeys.FLY_PRESET_5.getKeybind())
+            {
+                this.setFlySpeedPreset(4);
+                return true;
+            }
+            else if (key == Hotkeys.FLY_PRESET_6.getKeybind())
+            {
+                this.setFlySpeedPreset(5);
                 return true;
             }
             else if (key == Hotkeys.HOTBAR_SCROLL.getKeybind())

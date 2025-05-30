@@ -63,6 +63,8 @@ public class Configs implements IConfigHandler
         public static final ConfigDouble        FLY_SPEED_PRESET_2                  = new ConfigDouble      ("flySpeedPreset2", 0.064, 0, 4, "The fly speed for preset 2");
         public static final ConfigDouble        FLY_SPEED_PRESET_3                  = new ConfigDouble      ("flySpeedPreset3", 0.128, 0, 4, "The fly speed for preset 3");
         public static final ConfigDouble        FLY_SPEED_PRESET_4                  = new ConfigDouble      ("flySpeedPreset4", 0.32, 0, 4, "The fly speed for preset 4");
+        public static final ConfigDouble        FLY_SPEED_PRESET_5                  = new ConfigDouble      ("flySpeedPreset5", 0.64, 0, 4, "The fly speed for preset 5");
+        public static final ConfigDouble        FLY_SPEED_PRESET_6                  = new ConfigDouble      ("flySpeedPreset6", 1.28, 0, 4, "The fly speed for preset 6");
         public static final ConfigBoolean       FREE_CAMERA_PLAYER_INPUTS           = new ConfigBoolean     ("freeCameraPlayerInputs", false, "When enabled, the attacks and use actions\n(ie. left and right clicks) in Free Camera mode are\nlet through to the actual player.");
         public static final ConfigBoolean       FREE_CAMERA_PLAYER_MOVEMENT         = new ConfigBoolean     ("freeCameraPlayerMovement", false, "When enabled, the movement inputs in the Free Camera mode\nwill move the actual client player instead of the camera");
         public static final ConfigDouble        GAMMA_OVERRIDE_VALUE                = new ConfigDouble      ("gammaOverrideValue", 16, 0, 32, "The gamma value to use when the override option is enabled");
@@ -167,6 +169,8 @@ public class Configs implements IConfigHandler
                 FLY_SPEED_PRESET_2,
                 FLY_SPEED_PRESET_3,
                 FLY_SPEED_PRESET_4,
+                FLY_SPEED_PRESET_5,
+                FLY_SPEED_PRESET_6,
                 GAMMA_OVERRIDE_VALUE,
                 HAND_RESTOCK_PRE_THRESHOLD,
                 HOTBAR_SLOT_CYCLE_MAX,
@@ -370,7 +374,7 @@ public class Configs implements IConfigHandler
 
     public static class Internal
     {
-        public static final ConfigInteger       FLY_SPEED_PRESET                    = new ConfigInteger     ("flySpeedPreset", 0, 0, 3, "This is just for the mod internally to track the\ncurrently selected fly speed preset");
+        public static final ConfigInteger       FLY_SPEED_PRESET                    = new ConfigInteger     ("flySpeedPreset", 0, 0, 5, "This is just for the mod internally to track the\ncurrently selected fly speed preset");
         public static final ConfigDouble        GAMMA_VALUE_ORIGINAL                = new ConfigDouble      ("gammaValueOriginal", 0, 0, 1, "The original gamma value, before the gamma override was enabled");
         public static final ConfigInteger       HOTBAR_SCROLL_CURRENT_ROW           = new ConfigInteger     ("hotbarScrollCurrentRow", 3, 0, 3, "This is just for the mod internally to track the\n\"current hotbar row\" for the hotbar scrolling feature");
         public static final ConfigDouble        SLIME_BLOCK_SLIPPERINESS_ORIGINAL   = new ConfigDouble      ("slimeBlockSlipperinessOriginal", 0.8, 0, 1, "The original slipperiness value of Slime Blocks");
@@ -394,6 +398,8 @@ public class Configs implements IConfigHandler
             case 1:  return Configs.Generic.FLY_SPEED_PRESET_2;
             case 2:  return Configs.Generic.FLY_SPEED_PRESET_3;
             case 3:  return Configs.Generic.FLY_SPEED_PRESET_4;
+            case 4:  return Configs.Generic.FLY_SPEED_PRESET_5;
+            case 5:  return Configs.Generic.FLY_SPEED_PRESET_6;
             default: return Configs.Generic.FLY_SPEED_PRESET_1;
         }
     }
