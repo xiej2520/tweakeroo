@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
 import fi.dy.masa.tweakeroo.mixin.IMixinMiningToolItem;
-import fi.dy.masa.tweakeroo.mixin.IMixinSlot;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.container.Container;
@@ -317,7 +316,7 @@ public class InventoryUtils
     {
         int slotWithItem;
 
-        if (stackReference.getItem().isDamageable())
+        if (stackReference.isDamageable())
         {
             int minDurability = getMinDurability(stackReference);
             slotWithItem = findSlotWithSuitableReplacementToolWithDurabilityLeft(player.playerContainer, stackReference, minDurability);
@@ -815,7 +814,6 @@ public class InventoryUtils
             }
         }
     }
-
 
     private static void swapItemToEquipmentSlot(PlayerEntity player, EquipmentSlot type, int sourceSlotNumber)
     {

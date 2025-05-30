@@ -2,8 +2,10 @@ package fi.dy.masa.tweakeroo.event;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.FilledMapItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -66,7 +68,8 @@ public class RenderHandler implements IRenderer
     @Override
     public void onRenderTooltipLast(ItemStack stack, int x, int y)
     {
-        if (stack.getItem() instanceof FilledMapItem)
+        Item item = stack.getItem();
+        if (item instanceof FilledMapItem)
         {
             if (FeatureToggle.TWEAK_MAP_PREVIEW.getBooleanValue() &&
                 (Configs.Generic.MAP_PREVIEW_REQUIRE_SHIFT.getBooleanValue() == false || GuiBase.isShiftDown()))
@@ -76,9 +79,7 @@ public class RenderHandler implements IRenderer
         }
         else if (FeatureToggle.TWEAK_SHULKERBOX_DISPLAY.getBooleanValue())
         {
-            boolean render = Configs.Generic.SHULKER_DISPLAY_REQUIRE_SHIFT.getBooleanValue() == false || GuiBase.isShiftDown();
-
-            if (render)
+            if (Configs.Generic.SHULKER_DISPLAY_REQUIRE_SHIFT.getBooleanValue() == false || GuiBase.isShiftDown())
             {
                 fi.dy.masa.malilib.render.RenderUtils.renderShulkerBoxPreview(stack, x, y, Configs.Generic.SHULKER_DISPLAY_BACKGROUND_COLOR.getBooleanValue());
             }
@@ -86,7 +87,7 @@ public class RenderHandler implements IRenderer
     }
 
     @Override
-    public void onRenderWorldLast(float partialTicks, net.minecraft.client.util.math.MatrixStack matrixStack)
+    public void onRenderWorldLast(float partialTicks, MatrixStack matrixStack)
     {
         MinecraftClient mc = MinecraftClient.getInstance();
 
@@ -96,7 +97,7 @@ public class RenderHandler implements IRenderer
         }
     }
 
-    private void renderOverlays(net.minecraft.client.util.math.MatrixStack matrixStack, MinecraftClient mc)
+    private void renderOverlays(MatrixStack matrixStack, MinecraftClient mc)
     {
         Entity entity = mc.getCameraEntity();
 

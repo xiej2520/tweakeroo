@@ -1,8 +1,10 @@
 package fi.dy.masa.tweakeroo.mixin;
 
+import net.minecraft.client.util.math.MatrixStack;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -26,8 +28,8 @@ public abstract class MixinWorldRenderer
     @Shadow private int cameraChunkX;
     @Shadow private int cameraChunkZ;
 
-    private int lastUpdatePosX;
-    private int lastUpdatePosZ;
+    @Unique private int lastUpdatePosX;
+    @Unique private int lastUpdatePosZ;
 
     @Inject(method = "method_22713", at = @At("HEAD"), cancellable = true) // renderRain
     private void cancelRainRender(Camera camera, CallbackInfo ci)
@@ -49,7 +51,7 @@ public abstract class MixinWorldRenderer
 
     @Inject(method = "render", at = @At(value = "INVOKE_STRING",
             target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", args = "ldc=terrain_setup"))
-    private void preSetupTerrain(net.minecraft.client.util.math.MatrixStack matrixStack, float partialTicks, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer renderer, LightmapTextureManager lightmap, Matrix4f matrix4f, CallbackInfo ci)
+    private void preSetupTerrain(MatrixStack matrixStack, float partialTicks, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer renderer, LightmapTextureManager lightmap, Matrix4f matrix4f, CallbackInfo ci)
     {
         if (FeatureToggle.TWEAK_FREE_CAMERA.getBooleanValue())
         {
@@ -59,7 +61,7 @@ public abstract class MixinWorldRenderer
 
     @Inject(method = "render", at = @At(value = "INVOKE_STRING",
             target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", args = "ldc=updatechunks"))
-    private void postSetupTerrain(net.minecraft.client.util.math.MatrixStack matrixStack, float partialTicks, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer renderer, LightmapTextureManager lightmap, Matrix4f matrix4f, CallbackInfo ci)
+    private void postSetupTerrain(MatrixStack matrixStack, float partialTicks, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer renderer, LightmapTextureManager lightmap, Matrix4f matrix4f, CallbackInfo ci)
     {
         CameraUtils.setFreeCameraSpectator(false);
     }
@@ -121,6 +123,7 @@ public abstract class MixinWorldRenderer
             int x = MathHelper.floor(camera.getPos().x) >> 4;
             int z = MathHelper.floor(camera.getPos().z) >> 4;
             CameraUtils.markChunksForRebuild(x, z, this.lastUpdatePosX, this.lastUpdatePosZ);
+            // Could send this to ServuX in the future
         }
     }
 }

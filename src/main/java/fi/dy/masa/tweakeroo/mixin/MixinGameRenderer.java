@@ -12,16 +12,11 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ProjectileUtil;
 import net.minecraft.entity.decoration.AbstractDecorationEntity;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
 import fi.dy.masa.tweakeroo.config.Callbacks;
 import fi.dy.masa.tweakeroo.config.Configs;
 import fi.dy.masa.tweakeroo.config.FeatureToggle;
@@ -32,10 +27,7 @@ import fi.dy.masa.tweakeroo.util.MiscUtils;
 @Mixin(value = GameRenderer.class, priority = 1001)
 public abstract class MixinGameRenderer
 {
-    @Shadow
-    @Final
-    private MinecraftClient client;
-
+    @Shadow @Final private MinecraftClient client;
     private float realYaw;
     private float realPitch;
 
@@ -46,18 +38,6 @@ public abstract class MixinGameRenderer
         {
             ci.cancel();
         }
-    }
-
-    @Redirect(method = "renderWorld", require = 0, at = @At(value = "FIELD",
-              target = "Lnet/minecraft/client/options/GameOptions;bobView:Z"))
-    private boolean disableWorldViewBob(GameOptions options)
-    {
-        if (Configs.Disable.DISABLE_WORLD_VIEW_BOB.getBooleanValue())
-        {
-            return false;
-        }
-
-        return options.bobView;
     }
 
     @Inject(method = "getFov", at = @At("HEAD"), cancellable = true)

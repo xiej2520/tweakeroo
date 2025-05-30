@@ -12,3 +12,6 @@ run/
 build.number
 run
 .vscode
+libs/
+.idea/
+run/
