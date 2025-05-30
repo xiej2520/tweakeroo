@@ -39,7 +39,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Shadow public float lastNauseaStrength;
     @Shadow public float nextNauseaStrength;
     @Shadow private boolean field_3939; // falling
-    private final DummyMovementInput dummyMovementInput = new DummyMovementInput(null);
+    @Unique private final DummyMovementInput dummyMovementInput = new DummyMovementInput(null);
     @Unique private Input realInput;
     @Unique private float realNextNauseaStrength;
     @Unique private ItemStack autoSwitchElytraChestplate = ItemStack.EMPTY;

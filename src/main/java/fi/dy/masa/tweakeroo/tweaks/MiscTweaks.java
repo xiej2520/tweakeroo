@@ -3,7 +3,6 @@ package fi.dy.masa.tweakeroo.tweaks;
 import java.util.Collection;
 import java.util.function.Consumer;
 import javax.annotation.Nullable;
-import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.options.KeyBinding;
@@ -214,7 +213,7 @@ public class MiscTweaks
                 if (count > 0)
                 {
                     InfoUtils.printActionbarMessage("tweakeroo.message.potion_effects_running_out",
-                            Integer.valueOf(count), Integer.valueOf(minDuration / 20));
+                            count, minDuration / 20);
                 }
             }
         }

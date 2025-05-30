@@ -4,6 +4,7 @@ import java.util.Arrays;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -29,10 +30,10 @@ public abstract class MixinCommandBlockScreen extends AbstractCommandBlockScreen
     @Shadow private ButtonWidget conditionalModeButton;
     @Shadow private ButtonWidget redstoneTriggerButton;
 
-    private TextFieldWidget textFieldName;
-    private ButtonWidget buttonUpdateExec;
-    private boolean updateExecValue;
-    private String lastName = "";
+    @Unique private TextFieldWidget textFieldName;
+    @Unique private ButtonWidget buttonUpdateExec;
+    @Unique private boolean updateExecValue;
+    @Unique private String lastName = "";
 
     @Inject(method = "init", at = @At("RETURN"))
     private void addExtraFields(CallbackInfo ci)

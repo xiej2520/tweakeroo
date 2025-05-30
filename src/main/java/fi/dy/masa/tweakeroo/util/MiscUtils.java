@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
-import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.MaterialColor;
@@ -34,7 +33,6 @@ import net.minecraft.text.Style;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import fi.dy.masa.malilib.gui.GuiBase;
 import fi.dy.masa.malilib.gui.Message;
@@ -52,7 +50,6 @@ import fi.dy.masa.tweakeroo.mixin.IMixinClientWorld;
 import fi.dy.masa.tweakeroo.mixin.IMixinCommandBlockExecutor;
 import fi.dy.masa.tweakeroo.mixin.IMixinShovelItem;
 import fi.dy.masa.tweakeroo.renderer.RenderUtils;
-import net.minecraft.world.dimension.Dimension;
 
 public class MiscUtils
 {

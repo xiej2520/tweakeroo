@@ -33,7 +33,6 @@ import fi.dy.masa.tweakeroo.util.SnapAimMode;
 public class Callbacks
 {
     public static boolean skipWorldRendering;
-    private static double mouseSensitivity = -1.0;
 
     public static void init(MinecraftClient mc)
     {
