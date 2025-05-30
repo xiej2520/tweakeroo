@@ -36,7 +36,7 @@
 
     "depends": {
       "minecraft": "1.15.2",
-        "malilib": ">=0.10.0-dev.20"
+        "malilib": ">=0.18.1-dev.38+xiej"
     },
 
     "custom": {
