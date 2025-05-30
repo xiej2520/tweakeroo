@@ -49,8 +49,7 @@ public abstract class MixinWorld {
         {
             if (this.unloadedBlockEntities.isEmpty() == false)
             {
-                HashSet<BlockEntity> remove = new HashSet<>();
-                remove.addAll(this.unloadedBlockEntities);
+                HashSet<BlockEntity> remove = new HashSet<>(this.unloadedBlockEntities);
 
                 this.tickingBlockEntities.removeAll(remove);
                 this.blockEntities.removeAll(remove);

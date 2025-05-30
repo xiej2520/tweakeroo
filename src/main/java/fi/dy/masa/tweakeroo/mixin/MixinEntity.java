@@ -2,6 +2,7 @@ package fi.dy.masa.tweakeroo.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -24,8 +25,8 @@ public abstract class MixinEntity
     @Shadow public float prevYaw;
     @Shadow public float prevPitch;
 
-    private double forcedPitch;
-    private double forcedYaw;
+    @Unique private double forcedPitch;
+    @Unique private double forcedYaw;
 
     @Shadow public abstract net.minecraft.util.math.Vec3d getVelocity();
     @Shadow public abstract void setVelocity(net.minecraft.util.math.Vec3d velocity);
@@ -50,7 +51,7 @@ public abstract class MixinEntity
 
                 if (speed >= 1.0E-7D)
                 {
-                   motion = (speed > 1.0D ? motion.normalize() : motion).multiply((double) float_1);
+                   motion = (speed > 1.0D ? motion.normalize() : motion).multiply(float_1);
                    double xFactor = Math.sin(this.yaw * Math.PI / 180D);
                    double zFactor = Math.cos(this.yaw * Math.PI / 180D);
                    net.minecraft.util.math.Vec3d change = new net.minecraft.util.math.Vec3d(motion.x * zFactor - motion.z * xFactor, motion.y, motion.z * zFactor + motion.x * xFactor);
@@ -137,6 +138,7 @@ public abstract class MixinEntity
         }
     }
 
+    @Unique
     private void updateCustomPlayerRotations(double yawChange, double pitchChange, boolean updateYaw, boolean updatePitch, float pitchLimit)
     {
         if (updateYaw)

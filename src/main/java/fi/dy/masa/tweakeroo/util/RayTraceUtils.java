@@ -45,18 +45,14 @@ public class RayTraceUtils
         Optional<Vec3d> entityTrace = Optional.empty();
         Entity targetEntity = null;
 
-        for (int i = 0; i < list.size(); i++)
-        {
-            Entity entity = list.get(i);
+        for (Entity entity : list) {
             bb = entity.getBoundingBox();
             Optional<Vec3d> traceTmp = bb.rayTrace(lookVec, eyesVec);
 
-            if (traceTmp.isPresent())
-            {
+            if (traceTmp.isPresent()) {
                 double distance = eyesVec.distanceTo(traceTmp.get());
 
-                if (distance <= closest)
-                {
+                if (distance <= closest) {
                     targetEntity = entity;
                     entityTrace = traceTmp;
                     closest = distance;

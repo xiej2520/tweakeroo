@@ -10,5 +10,5 @@ import net.minecraft.world.gen.chunk.FlatChunkGeneratorLayer;
 public interface IMixinFlatChunkGeneratorConfig
 {
     @Invoker("parseLayersString")
-    public static List<FlatChunkGeneratorLayer> getLayersFromStringInvoker(String str) { return null; }
+    static List<FlatChunkGeneratorLayer> getLayersFromStringInvoker(String str) { return null; }
 }

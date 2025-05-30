@@ -34,7 +34,7 @@ public class ItemRestriction
             {
                 Item item = Registry.ITEM.get(new Identifier(name));
 
-                if (item != null && item != Items.AIR)
+                if (item != Items.AIR)
                 {
                     set.add(item);
                 }

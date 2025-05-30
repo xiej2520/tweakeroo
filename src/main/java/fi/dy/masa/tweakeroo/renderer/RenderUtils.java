@@ -53,18 +53,18 @@ public class RenderUtils
             switch (align)
             {
                 case TOP_RIGHT:
-                    startX = (int) scaledWidth - offX - 9 * 18;
+                    startX = scaledWidth - offX - 9 * 18;
                     break;
                 case BOTTOM_LEFT:
-                    startY = (int) scaledHeight - offY - 3 * 18;
+                    startY = scaledHeight - offY - 3 * 18;
                     break;
                 case BOTTOM_RIGHT:
-                    startX = (int) scaledWidth - offX - 9 * 18;
-                    startY = (int) scaledHeight - offY - 3 * 18;
+                    startX = scaledWidth - offX - 9 * 18;
+                    startY = scaledHeight - offY - 3 * 18;
                     break;
                 case CENTER:
-                    startX = (int) scaledWidth / 2 - offX - 9 * 18 / 2;
-                    startY = (int) scaledHeight / 2 - offY - 3 * 18 / 2;
+                    startX = scaledWidth / 2 - offX - 9 * 18 / 2;
+                    startY = scaledHeight / 2 - offY - 3 * 18 / 2;
                     break;
                 default:
             }
@@ -120,7 +120,7 @@ public class RenderUtils
 
         HitResult trace = RayTraceUtils.getRayTraceFromEntity(world, cameraEntity, false);
 
-        if (trace == null)
+        if (trace.getType() == HitResult.Type.MISS)
         {
             return;
         }
@@ -177,7 +177,7 @@ public class RenderUtils
 
             final fi.dy.masa.malilib.render.InventoryOverlay.InventoryRenderType type = (entityLivingBase instanceof VillagerEntity) ? fi.dy.masa.malilib.render.InventoryOverlay.InventoryRenderType.VILLAGER : fi.dy.masa.malilib.render.InventoryOverlay.getInventoryType(inv);
             final fi.dy.masa.malilib.render.InventoryOverlay.InventoryProperties props = fi.dy.masa.malilib.render.InventoryOverlay.getInventoryPropsTemp(type, totalSlots);
-            final int rows = (int) Math.ceil(totalSlots / props.slotsPerRow);
+            final int rows = (int) Math.ceil((double) totalSlots / props.slotsPerRow);
             int xInv = xCenter - (props.width / 2);
             int yInv = yCenter - props.height - 6;
 

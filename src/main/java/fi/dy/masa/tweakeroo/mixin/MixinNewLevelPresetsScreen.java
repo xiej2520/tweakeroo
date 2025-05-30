@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -17,7 +18,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.chunk.FlatChunkGeneratorLayer;
-import net.minecraft.world.gen.feature.StructureFeature;
 import fi.dy.masa.tweakeroo.Tweakeroo;
 import fi.dy.masa.tweakeroo.config.Configs;
 import fi.dy.masa.tweakeroo.config.FeatureToggle;
@@ -27,6 +27,7 @@ import fi.dy.masa.tweakeroo.tweaks.MiscTweaks;
 public abstract class MixinNewLevelPresetsScreen
 {
     // name;blocks;biome;options;iconitem
+    @Unique
     private static final Pattern PATTERN_PRESET = Pattern.compile("^(?<name>[a-zA-Z0-9_ -]+);(?<blocks>[a-z0-9_:\\.\\*-]+);(?<biome>[a-z0-9_:]+);(?<options>[a-z0-9_, \\(\\)=]*);(?<icon>[a-z0-9_:-]+)$");
 
     @Shadow
@@ -34,7 +35,7 @@ public abstract class MixinNewLevelPresetsScreen
     private static List<Object> presets;
 
     @Shadow
-    private static void addPreset(String name, ItemConvertible itemIn, Biome biomeIn, List<String> options, FlatChunkGeneratorLayer... layers) {};
+    private static void addPreset(String name, ItemConvertible itemIn, Biome biomeIn, List<String> options, FlatChunkGeneratorLayer... layers) {}
 
     @Inject(method = "init", at = @At("HEAD"))
     private void addCustomEntries(CallbackInfo ci)
@@ -64,6 +65,7 @@ public abstract class MixinNewLevelPresetsScreen
         }
     }
 
+    @Unique
     private boolean registerPresetFromString(String str)
     {
         Matcher matcher = PATTERN_PRESET.matcher(str);

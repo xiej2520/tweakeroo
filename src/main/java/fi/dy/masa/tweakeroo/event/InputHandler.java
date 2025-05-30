@@ -227,7 +227,7 @@ public class InputHandler implements IKeybindProvider, IKeyboardInputHandler, IM
                 config.setDoubleValue(newValue);
                 KeyCallbackAdjustable.setValueChanged();
 
-                String val = preGreen + String.valueOf(config.getDoubleValue()) + rst;
+                String val = preGreen + config.getDoubleValue() + rst;
                 String key = mode == SnapAimMode.PITCH ? "tweakeroo.message.set_snap_aim_pitch_step_to" : "tweakeroo.message.set_snap_aim_yaw_step_to";
 
                 InfoUtils.printActionbarMessage(key, val);
