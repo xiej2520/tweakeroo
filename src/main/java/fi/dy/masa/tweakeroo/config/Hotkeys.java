@@ -32,6 +32,8 @@ public class Hotkeys
     public static final ConfigHotkey FLY_PRESET_2                       = new ConfigHotkey("flyPreset2",                        "").apply(HOTKEY_KEY);
     public static final ConfigHotkey FLY_PRESET_3                       = new ConfigHotkey("flyPreset3",                        "").apply(HOTKEY_KEY);
     public static final ConfigHotkey FLY_PRESET_4                       = new ConfigHotkey("flyPreset4",                        "").apply(HOTKEY_KEY);
+    public static final ConfigHotkey FLY_PRESET_5                       = new ConfigHotkey("flyPreset5",                        "").apply(HOTKEY_KEY);
+    public static final ConfigHotkey FLY_PRESET_6                       = new ConfigHotkey("flyPreset6",                        "").apply(HOTKEY_KEY);
     public static final ConfigHotkey FLY_INCREMENT_1                    = new ConfigHotkey("flyIncrement1",                     "").apply(HOTKEY_KEY);
     public static final ConfigHotkey FLY_INCREMENT_2                    = new ConfigHotkey("flyIncrement2",                     "").apply(HOTKEY_KEY);
     public static final ConfigHotkey FREE_CAMERA_PLAYER_INPUTS          = new ConfigHotkey("freeCameraPlayerInputs",            "").apply(HOTKEY_KEY);
@@ -81,6 +83,8 @@ public class Hotkeys
             FLY_PRESET_2,
             FLY_PRESET_3,
             FLY_PRESET_4,
+            FLY_PRESET_5,
+            FLY_PRESET_6,
             FLY_INCREMENT_1,
             FLY_INCREMENT_2,
             FREE_CAMERA_PLAYER_INPUTS,
