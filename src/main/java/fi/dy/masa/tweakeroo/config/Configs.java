@@ -79,6 +79,8 @@ public class Configs implements IConfigHandler
         public static final ConfigDouble        	FLY_SPEED_PRESET_2                  = new ConfigDouble      ("flySpeedPreset2", 0.064, 0, 4).apply(GENERIC_KEY);
         public static final ConfigDouble        	FLY_SPEED_PRESET_3                  = new ConfigDouble      ("flySpeedPreset3", 0.128, 0, 4).apply(GENERIC_KEY);
         public static final ConfigDouble        	FLY_SPEED_PRESET_4                  = new ConfigDouble      ("flySpeedPreset4", 0.32, 0, 4).apply(GENERIC_KEY);
+        public static final ConfigDouble            FLY_SPEED_PRESET_5                  = new ConfigDouble      ("flySpeedPreset5", 0.64, 0, 4).apply(GENERIC_KEY);
+        public static final ConfigDouble            FLY_SPEED_PRESET_6                  = new ConfigDouble      ("flySpeedPreset6", 1.28, 0, 4).apply(GENERIC_KEY);
         public static final ConfigDouble        	FLY_SPEED_INCREMENT_1               = new ConfigDouble      ("flySpeedIncrement1", 0.128, -4, 4).apply(GENERIC_KEY);
         public static final ConfigDouble        	FLY_SPEED_INCREMENT_2               = new ConfigDouble      ("flySpeedIncrement2", -0.128, -4, 4).apply(GENERIC_KEY);
         public static final ConfigBooleanHotkeyed   FREE_CAMERA_PLAYER_INPUTS           = new ConfigBooleanHotkeyed ("freeCameraPlayerInputs", false, "").apply(GENERIC_KEY);
@@ -235,6 +237,8 @@ public class Configs implements IConfigHandler
                 FLY_SPEED_PRESET_2,
                 FLY_SPEED_PRESET_3,
                 FLY_SPEED_PRESET_4,
+                FLY_SPEED_PRESET_5,
+                FLY_SPEED_PRESET_6,
                 FLY_SPEED_INCREMENT_1,
                 FLY_SPEED_INCREMENT_2,
                 GAMMA_OVERRIDE_VALUE,
@@ -516,6 +520,8 @@ public class Configs implements IConfigHandler
             case 1 -> Generic.FLY_SPEED_PRESET_2;
             case 2 -> Generic.FLY_SPEED_PRESET_3;
             case 3 -> Generic.FLY_SPEED_PRESET_4;
+            case 4 -> Generic.FLY_SPEED_PRESET_5;
+            case 5 -> Generic.FLY_SPEED_PRESET_6;
             default -> Generic.FLY_SPEED_PRESET_1;
         };
     }
