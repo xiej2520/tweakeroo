@@ -1,5 +1,13 @@
 package tweakeroo.mixin;
 
+import malilib.util.position.HitResult;
+import net.minecraft.block.Block;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -31,6 +39,12 @@ import tweakeroo.util.InventoryUtils;
 public abstract class MixinPlayerControllerMP
 {
     @Shadow @Final private Minecraft mc;
+
+    @Shadow
+    public abstract EnumActionResult processRightClickBlock(EntityPlayerSP player, WorldClient worldIn, BlockPos pos, EnumFacing direction, Vec3d vec, EnumHand hand);
+
+    @Shadow
+    private int blockHitDelay;
 
     @Inject(method = "processRightClick", at = @At(
             value = "INVOKE",
@@ -140,6 +154,32 @@ public abstract class MixinPlayerControllerMP
             cir.setReturnValue(false);
         }
     }
+
+    @Inject(method = "onPlayerDestroyBlock", at = @At("RETURN"))
+    private void handleBreakReplace(BlockPos pos, CallbackInfoReturnable<Boolean> cir)
+    {
+        if (FeatureToggle.TWEAK_BREAK_REPLACE.getBooleanValue())
+        {
+            HitResult trace = HitResult.of(this.mc.objectMouseOver);
+            if (trace != null && trace.type == HitResult.Type.BLOCK)
+            {
+                for (EnumHand hand : EnumHand.values())
+                {
+                    ItemStack stack = this.mc.player.getHeldItem(hand);
+                    Vec3d playerPos = this.mc.player.getPositionVector();
+                    if (stack != null && stack.getItem() instanceof ItemBlock && this.processRightClickBlock(this.mc.player, this.mc.world, pos,
+                                EnumFacing.getFacingFromVector((float) playerPos.x, (float) playerPos.y, (float) playerPos.z),
+                                playerPos, hand) == EnumActionResult.SUCCESS
+                        )
+                    {
+                        this.blockHitDelay = 5;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
 
     @Inject(method = "onPlayerDamageBlock", at = @At("HEAD"), cancellable = true)
     private void handleBreakingRestriction2(BlockPos pos, EnumFacing side, CallbackInfoReturnable<Boolean> cir)
