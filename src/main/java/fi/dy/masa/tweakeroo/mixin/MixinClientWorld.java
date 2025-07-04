@@ -1,7 +1,13 @@
 package fi.dy.masa.tweakeroo.mixin;
 
 import java.util.function.BiFunction;
+
+import fi.dy.masa.malilib.util.EntityUtils;
+import fi.dy.masa.tweakeroo.config.FeatureToggle;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.biome.Biome;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -25,6 +31,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ClientWorld.class)
 public abstract class MixinClientWorld extends World implements IMixinClientWorld
 {
+    @Shadow public abstract Vec3d method_23777(BlockPos blockPos, float f);
+
     protected MixinClientWorld(LevelProperties settings, DimensionType dimType, BiFunction<World, Dimension, ChunkManager> func, Profiler profiler)
     {
         super(settings, dimType, func, profiler, true);
@@ -94,6 +102,18 @@ public abstract class MixinClientWorld extends World implements IMixinClientWorl
         if (Configs.Disable.DISABLE_SKY_DARKNESS.getBooleanValue())
         {
             cir.setReturnValue(-2.0);
+        }
+    }
+
+    @Inject(method = "getFogColor", at = @At("HEAD"), cancellable = true)
+    private void adjustFogColor(float tickDelta, CallbackInfoReturnable<Vec3d> cir)
+    {
+        if (FeatureToggle.TWEAK_MATCHING_SKY_FOG.getBooleanValue())
+        {
+            if (this.dimension.hasSkyLight() && this.isRaining() == false)
+            {
+                cir.setReturnValue(this.method_23777(EntityUtils.getCameraEntity().getBlockPos(), tickDelta));
+            }
         }
     }
 }
