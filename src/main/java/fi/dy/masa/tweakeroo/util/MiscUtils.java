@@ -440,4 +440,13 @@ public class MiscUtils
     public static Vec3i add_Vec3i(Vec3i v1, Vec3i v2) {
         return new Vec3i(v1.getX() + v2.getX(), v1.getY() + v2.getY(), v1.getZ() + v2.getZ());
     }
+
+    public static boolean isInReach(BlockPos pos, PlayerEntity player, double reach)
+    {
+        Vec3d playerpos = player.getCameraPosVec(1.0F);
+        double d = playerpos.getX() - ((double) pos.getX() + 0.5D);
+        double d1 = playerpos.getY() - ((double) pos.getY() + 0.5D);
+        double d2 = playerpos.getZ() - ((double) pos.getZ() + 0.5D);
+        return d * d + d1 * d1 + d2 * d2 <= reach * reach;
+    }
 }

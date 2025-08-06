@@ -98,6 +98,8 @@ public class Configs implements IConfigHandler
         public static final ConfigBoolean       REMEMBER_FLEXIBLE                   = new ConfigBoolean     ("rememberFlexibleFromClick", true, "If enabled, then the Flexible Block Placement status\nwill be remembered from the first placed block,\nas long as the use key (right click) is held down.\nBasically you don't have to keep holding all the flexible\nactivation keys to fast place all the blocks in the same orientation.");
         public static final ConfigInteger       RENDER_LIMIT_ITEM                   = new ConfigInteger     ("renderLimitItem", -1, -1, 10000, "Maximum number of item entities rendered per frame.\nUse -1 for normal behaviour, ie. to disable this limit.");
         public static final ConfigInteger       RENDER_LIMIT_XP_ORB                 = new ConfigInteger     ("renderLimitXPOrb", -1, -1, 10000, "Maximum number of XP orb entities rendered per frame.\nUse -1 for normal behaviour, ie. to disable this limit.");
+        public static final ConfigInteger       SCAFFOLD_PLACE_DISTANCE             = new ConfigInteger     ("scaffoldPlaceDistance", 5, 1, 20, "Maximum operational distance from the player for the 'tweakScaffoldPlace' tweak.\nWritten by Andrew54757 under TweakFork");
+        public static final ConfigBoolean       SCAFFOLD_PLACE_VANILLA              = new ConfigBoolean     ("scaffoldPlaceVanilla", false, "When enabled, extend direction is only set by player direction.\nWritten by Andrew54757 under TweakFork");
         public static final ConfigBoolean       SHULKER_DISPLAY_BACKGROUND_COLOR    = new ConfigBoolean     ("shulkerDisplayBgColor", true, "Enables tinting/coloring the Shulker Box display\nbackground texture with the dye color of the box");
         public static final ConfigBoolean       SHULKER_DISPLAY_REQUIRE_SHIFT       = new ConfigBoolean     ("shulkerDisplayRequireShift", true, "Whether or not holding shift is required for the Shulker Box preview");
         public static final ConfigBoolean       SLOT_SYNC_WORKAROUND                = new ConfigBoolean     ("slotSyncWorkaround", true, "This prevents the server from overriding the durability or\nstack size on items that are being used quickly for example\nwith the fast right click tweak.");
@@ -135,6 +137,7 @@ public class Configs implements IConfigHandler
                 PLACEMENT_RESTRICTION_TIED_TO_FAST,
                 POTION_WARNING_BENEFICIAL_ONLY,
                 REMEMBER_FLEXIBLE,
+                SCAFFOLD_PLACE_VANILLA,
                 SHULKER_DISPLAY_BACKGROUND_COLOR,
                 SHULKER_DISPLAY_REQUIRE_SHIFT,
                 SLOT_SYNC_WORKAROUND,
@@ -194,6 +197,7 @@ public class Configs implements IConfigHandler
                 POTION_WARNING_THRESHOLD,
                 RENDER_LIMIT_ITEM,
                 RENDER_LIMIT_XP_ORB,
+                SCAFFOLD_PLACE_DISTANCE,
                 SNAP_AIM_PITCH_STEP,
                 SNAP_AIM_THRESHOLD_PITCH,
                 SNAP_AIM_THRESHOLD_YAW,
