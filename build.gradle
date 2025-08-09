@@ -24,6 +24,7 @@ repositories {
 	// maven { url 'https://maven.terraformersmc.com/releases/' }
 
 	maven { url 'https://masa.dy.fi/maven' }
+	mavenLocal()
 }
 
 dependencies {
