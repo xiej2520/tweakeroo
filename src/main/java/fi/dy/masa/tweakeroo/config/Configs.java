@@ -69,6 +69,9 @@ public class Configs implements IConfigHandler
         public static final ConfigDouble        FLY_SPEED_INCREMENT_2               = new ConfigDouble      ("flySpeedIncrement2", -0.128, -4, 4, "How much the fly speed changes for increment 2");
         public static final ConfigBoolean       FREE_CAMERA_PLAYER_INPUTS           = new ConfigBoolean     ("freeCameraPlayerInputs", false, "When enabled, the attacks and use actions\n(ie. left and right clicks) in Free Camera mode are\nlet through to the actual player.");
         public static final ConfigBoolean       FREE_CAMERA_PLAYER_MOVEMENT         = new ConfigBoolean     ("freeCameraPlayerMovement", false, "When enabled, the movement inputs in the Free Camera mode\nwill move the actual client player instead of the camera");
+        public static final ConfigBoolean       FREE_CAMERA_SHOW_HANDS              = new ConfigBoolean     ("freeCameraShowHands", false, "Show your Hands while in FreeCam.");
+        public static final ConfigBoolean       FREE_CAMERA_SHOW_HOTBAR             = new ConfigBoolean     ("freeCameraShowHotBar", false, "Show your hotbar while in FreeCam.");
+        public static final ConfigBoolean       FREE_CAMERA_SHOW_STATUS_BARS        = new ConfigBoolean     ("freeCameraShowStatusBars", false, "Show your Status Bars (Locator, EXP, Health, etc) while in FreeCam.");
         public static final ConfigDouble        GAMMA_OVERRIDE_VALUE                = new ConfigDouble      ("gammaOverrideValue", 16, 0, 32, "The gamma value to use when the override option is enabled");
         public static final ConfigBoolean       HAND_RESTOCK_PRE                    = new ConfigBoolean     ("handRestockPre", true, "If enabled, then hand restocking happens\nbefore the stack runs out");
         public static final ConfigInteger       HAND_RESTOCK_PRE_THRESHOLD          = new ConfigInteger     ("handRestockPreThreshold", 6, 1, 64, "The stack size threshold at which Hand Restock will happen\nin the pre-restock mode");
@@ -130,6 +133,9 @@ public class Configs implements IConfigHandler
                 FAST_PLACEMENT_REMEMBER_ALWAYS,
                 FREE_CAMERA_PLAYER_INPUTS,
                 FREE_CAMERA_PLAYER_MOVEMENT,
+                FREE_CAMERA_SHOW_HANDS,
+                FREE_CAMERA_SHOW_HOTBAR,
+                FREE_CAMERA_SHOW_STATUS_BARS,
                 LAVA_VISIBILITY_OPTIFINE,
                 HAND_RESTOCK_PRE,
                 HANGABLE_ENTITY_BYPASS_INVERSE,

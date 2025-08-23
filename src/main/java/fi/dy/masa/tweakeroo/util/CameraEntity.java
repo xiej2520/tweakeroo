@@ -1,7 +1,6 @@
 package fi.dy.masa.tweakeroo.util;
 
 import javax.annotation.Nullable;
-import fi.dy.masa.tweakeroo.mixin.IMixinGameRenderer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -172,7 +171,8 @@ public class CameraEntity extends ClientPlayerEntity
                 removeCamera(mc);
             }
 
-            ((IMixinGameRenderer) mc.gameRenderer).setRenderHand(! enabled);
+            // The hand is hidden by MixinGameRenderer.renderHand unless freeCameraShowHands (dee4bee62).
+            //((IMixinGameRenderer) mc.gameRenderer).setRenderHand(! enabled);
         }
     }
 

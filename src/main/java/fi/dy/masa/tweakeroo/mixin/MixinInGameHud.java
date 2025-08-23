@@ -35,6 +35,40 @@ public abstract class MixinInGameHud extends DrawableHelper
         }
     }
 
+    @Inject(method = "renderHotbar", at = @At("HEAD"), cancellable = true)
+    private void tweakeroo_overrideHotbarRendering(float tickDelta, CallbackInfo ci)
+    {
+        // This turns off rendering of the hotbar
+        if (FeatureToggle.TWEAK_FREE_CAMERA.getBooleanValue() &&
+            !Configs.Generic.FREE_CAMERA_SHOW_HOTBAR.getBooleanValue())
+        {
+            ci.cancel();
+        }
+    }
+
+    @Inject(method = "renderHeldItemTooltip", at = @At("HEAD"), cancellable = true)
+    private void tweakeroo_overrideHeldItemTooltipRendering(CallbackInfo ci)
+    {
+        // This turns off rendering of the item "tooltips" when selecting hotbar items
+        if (FeatureToggle.TWEAK_FREE_CAMERA.getBooleanValue() &&
+            !Configs.Generic.FREE_CAMERA_SHOW_HOTBAR.getBooleanValue() &&
+            !Configs.Generic.FREE_CAMERA_SHOW_HANDS.getBooleanValue())
+        {
+            ci.cancel();
+        }
+    }
+
+    @Inject(method = { "renderStatusBars", "renderMountHealth", "renderMountJumpBar", "renderExperienceBar" }, at = @At("HEAD"), cancellable = true)
+    private void tweakeroo_overrideStatusBarRendering(CallbackInfo ci)
+    {
+        // This turns off all status bars
+        if (FeatureToggle.TWEAK_FREE_CAMERA.getBooleanValue() &&
+            !Configs.Generic.FREE_CAMERA_SHOW_STATUS_BARS.getBooleanValue())
+        {
+            ci.cancel();
+        }
+    }
+
     @Inject(method = "renderCrosshair", at = @At(value = "FIELD",
                 target = "Lnet/minecraft/client/options/GameOptions;debugEnabled:Z", ordinal = 0), cancellable = true)
     private void overrideCursorRender(CallbackInfo ci)
