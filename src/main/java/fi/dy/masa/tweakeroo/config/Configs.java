@@ -116,6 +116,7 @@ public class Configs implements IConfigHandler
         public static final ConfigInteger       STRUCTURE_BLOCK_MAX_SIZE            = new ConfigInteger     ("structureBlockMaxSize", 128, 1, 256, "The maximum dimensions for a Structure Block's saved area");
         public static final ConfigString        TOOL_SWITCHABLE_SLOTS               = new ConfigString      ("toolSwitchableSlots", "1-9", "The slots that the Tool Switch tweak is allowed to put tools to.\nNote that Tool Switch can also switch to other slots in the hotbar,\nif they already have the preferred tool, but it will only\nswap new tools to these slots");
         public static final ConfigString        TOOL_SWITCH_IGNORED_SLOTS           = new ConfigString      ("toolSwitchIgnoredSlots", "", "The slots where the Tool Switch tweak does not work when they are active.");
+        public static final ConfigBoolean       TOOL_SWAP_ALLOW_UNENCHANTED_TO_BREAK= new ConfigBoolean     ("toolSwapAllowUnenchantedToBreak", false, "When enabled with §etweakSwapAlmostBrokenTools§r,\nthen tweakeroo will allow any tools that\ndo not have any enchantments to break.");
         public static final ConfigBoolean       TOOL_SWAP_BETTER_ENCHANTS           = new ConfigBoolean     ("toolSwapBetterEnchants",   false, "Consider a Tools' Enchantments and Rarity\nfor Tool swapping, only after comparing if\nit's the correct tool to use on the target.");
         public static final ConfigBoolean       WEAPON_SWAP_BETTER_ENCHANTS         = new ConfigBoolean     ("weaponSwapBetterEnchants", false, "Consider a Weapons' Enchantments and Rarity\nfor Weapon swapping, only after comparing if \nit's the correct Weapon to use on the target.");
         public static final ConfigBoolean       ZOOM_ADJUST_MOUSE_SENSITIVITY       = new ConfigBoolean     ("zoomAdjustMouseSensitivity", true, "If enabled, then the mouse sensitivity is reduced\nwhile the zoom feature is enabled and the zoom key is active");
@@ -145,6 +146,7 @@ public class Configs implements IConfigHandler
                 SNAP_AIM_INDICATOR,
                 SNAP_AIM_ONLY_CLOSE_TO_ANGLE,
                 SNAP_AIM_PITCH_OVERSHOOT,
+                TOOL_SWAP_ALLOW_UNENCHANTED_TO_BREAK,
                 ZOOM_ADJUST_MOUSE_SENSITIVITY,
 
                 BLOCK_TYPE_BREAK_RESTRICTION_WARN,
