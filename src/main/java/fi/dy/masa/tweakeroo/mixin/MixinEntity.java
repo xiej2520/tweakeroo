@@ -153,4 +153,13 @@ public abstract class MixinEntity
             this.lastFreePitch = net.minecraft.util.math.MathHelper.clamp(this.lastFreePitch + pitchChange * 0.15D, -pitchLimit, pitchLimit);
         }
     }
+
+    @Inject(method = "isGlowing", at = @At("HEAD"), cancellable = true)
+    private void onCheckGlowing(CallbackInfoReturnable<Boolean> cir)
+    {
+        if (FeatureToggle.TWEAK_OUTLINE_ENTITIES.getBooleanValue())
+        {
+            cir.setReturnValue(true);
+        }
+    }
 }
