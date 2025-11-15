@@ -68,6 +68,7 @@ public enum FeatureToggle implements ConfigInfo
     TWEAK_MAP_PREVIEW                   ("tweakMapPreview"),
     TWEAK_MATCHING_SKY_FOG              ("tweakMatchingSkyFog"),
     TWEAK_MOVEMENT_KEYS                 ("tweakMovementKeysLast"),
+    TWEAK_OUTLINE_ENTITIES              ("tweakOutlineEntities"),
     TWEAK_PERIODIC_ATTACK               ("tweakPeriodicAttack",                     KeyBindSettings.INGAME_RELEASE),
     TWEAK_PERIODIC_USE                  ("tweakPeriodicUse",                        KeyBindSettings.INGAME_RELEASE),
     TWEAK_PERMANENT_SNEAK               ("tweakPermanentSneak"),
