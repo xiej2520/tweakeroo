@@ -23,6 +23,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.phys.BlockHitResult;
@@ -147,6 +148,15 @@ public abstract class MixinMinecraftClient implements IMinecraftClientInvoker
             {
                 KeyMapping.set(InputConstants.getKey(this.options.keyUse.saveString()), true);
             }
+        }
+    }
+
+    @Inject(method = "shouldEntityAppearGlowing", at = @At("HEAD"), cancellable = true)
+    private void onCheckGlowing(Entity entity, CallbackInfoReturnable<Boolean> cir)
+    {
+        if (FeatureToggle.TWEAK_OUTLINE_ENTITIES.getBooleanValue())
+        {
+            cir.setReturnValue(true);
         }
     }
 }
