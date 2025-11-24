@@ -89,6 +89,11 @@ public class CameraEntity extends ClientPlayerEntity
 
         this.setVelocity(new Vec3d(x, y, z));
         this.move(MovementType.SELF, this.getVelocity());
+
+        // 1.15.2: needed for working ChunkBorderDebugRenderer?
+        this.chunkX = (int) Math.floor(this.getX()) >> 4;
+        this.chunkY = (int) Math.floor(this.getY()) >> 4;
+        this.chunkZ = (int) Math.floor(this.getZ()) >> 4;
     }
 
     private void updateLastTickPosition()
