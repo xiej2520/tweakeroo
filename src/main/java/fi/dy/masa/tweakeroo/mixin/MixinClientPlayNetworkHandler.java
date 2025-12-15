@@ -2,6 +2,7 @@ package fi.dy.masa.tweakeroo.mixin;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.network.packet.s2c.play.BlockActionS2CPacket;
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
 import net.minecraft.util.Hand;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,6 +14,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.packet.s2c.play.CombatEventS2CPacket;
 import net.minecraft.network.packet.s2c.play.ContainerSlotUpdateS2CPacket;
+import fi.dy.masa.tweakeroo.config.Configs;
 import fi.dy.masa.tweakeroo.config.FeatureToggle;
 import fi.dy.masa.tweakeroo.data.ServerDataSyncer;
 import fi.dy.masa.tweakeroo.tweaks.PlacementTweaks;
@@ -49,6 +51,18 @@ public abstract class MixinClientPlayNetworkHandler
         if (FeatureToggle.TWEAK_PRINT_DEATH_COORDINATES.getBooleanValue() && mc.player != null)
         {
             MiscUtils.printDeathCoordinates(mc);
+        }
+    }
+
+    /**
+     * Copied From Tweak Fork by Andrew54757
+     */
+    @Inject(method = "onBlockAction", at = @At("HEAD"), cancellable = true)
+    private void tweakeroo_onBlockEvent(BlockActionS2CPacket packet, CallbackInfo ci)
+    {
+        if (Configs.Disable.DISABLE_CLIENT_BLOCK_EVENTS.getBooleanValue())
+        {
+            ci.cancel();
         }
     }
 

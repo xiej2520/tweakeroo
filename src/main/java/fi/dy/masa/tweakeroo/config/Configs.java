@@ -298,6 +298,7 @@ public class Configs implements IConfigHandler
         public static final ConfigBooleanHotkeyed       DISABLE_BAT_SPAWNING            = new ConfigBooleanClient  ("disableBatSpawning",                   false, "", "Disables Bat spawning in single player");
         public static final ConfigBooleanHotkeyed       DISABLE_BEACON_BEAM_RENDERING   = new ConfigBooleanHotkeyed("disableBeaconBeamRendering",           false, "", "Disables Beacon beam rendering");
         public static final ConfigBooleanHotkeyed       DISABLE_BLOCK_BREAK_PARTICLES   = new ConfigBooleanHotkeyed("disableBlockBreakingParticles",        false, "", "Removes the block breaking particles.\n(This is originally from usefulmod by nessie.)");
+        public static final ConfigBooleanHotkeyed       DISABLE_CLIENT_BLOCK_EVENTS     = new ConfigBooleanHotkeyed("disableClientBlockEvents",             false, "", "Disables block event rendering (eg pistons animations)\nWritten by Andrew54757 under TweakFork");
         public static final ConfigBooleanHotkeyed       DISABLE_DOUBLE_TAP_SPRINT       = new ConfigBooleanHotkeyed("disableDoubleTapSprint",               false, "", "Disables the double-tap-forward-key sprinting");
         public static final ConfigBooleanHotkeyed       DISABLE_BOSS_BAR                = new ConfigBooleanHotkeyed("disableBossBar",                       false, "", "Disables boss bar rendering");
         public static final ConfigBooleanHotkeyed       DISABLE_BOSS_FOG                = new ConfigBooleanHotkeyed("disableBossFog",                       false, "", "Removes the fog that boss mobs cause");
@@ -343,6 +344,7 @@ public class Configs implements IConfigHandler
                 DISABLE_BAT_SPAWNING,
                 DISABLE_BEACON_BEAM_RENDERING,
                 DISABLE_BLOCK_BREAK_PARTICLES,
+                DISABLE_CLIENT_BLOCK_EVENTS,
                 DISABLE_DOUBLE_TAP_SPRINT,
                 DISABLE_BOSS_BAR,
                 DISABLE_BOSS_FOG,
