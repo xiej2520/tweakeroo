@@ -9,6 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,7 +18,9 @@ import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.MovementInput;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -64,6 +67,86 @@ public class MiscUtils
         renderCountItems = 0;
         renderCountXPOrbs = 0;
     }
+
+    public static void handlePlayerDeceleration()
+    {
+        Minecraft mc = Minecraft.getMinecraft();
+        MovementInput input = mc.player.movementInput;
+        if (input == null)
+        {
+            return;
+        }
+        if (input.jump || input.sneak ||
+            mc.player.moveForward != 0 || mc.player.moveStrafing != 0 || mc.player.capabilities.isFlying == false)
+        {
+            return;
+        }
+
+        double factor = Configs.Generic.FLY_DECELERATION_FACTOR.getDoubleValue();
+        mc.player.setVelocity(mc.player.motionX * factor, mc.player.motionY * factor, mc.player.motionZ * factor);
+    }
+
+    public static Vec3d calculatePlayerMotionWithDeceleration(Vec3d lastMotion, double rampAmount, double decelerationFactor, boolean sprinting)
+    {
+        GameSettings options = Minecraft.getMinecraft().gameSettings;
+        double forward = 0;
+        double vertical = 0;
+        double strafe = 0;
+        double speed;
+
+        if (options.keyBindForward.isKeyDown()) { forward += 1.0;  }
+        if (options.keyBindBack.isKeyDown())    { forward -= 1.0;  }
+        if (options.keyBindLeft.isKeyDown())    { strafe += 1.0;   }
+        if (options.keyBindRight.isKeyDown())   { strafe -= 1.0;   }
+        if (options.keyBindJump.isKeyDown())    { vertical += 1.0; }
+        if (options.keyBindSneak.isKeyDown())   { vertical -= 1.0; }
+
+        if (forward != 0 && strafe != 0)
+        {
+            speed = Math.sqrt((strafe * strafe + forward * forward) * 0.6);
+        }
+        else
+        {
+            speed = 1.0;
+        }
+
+        double forwardRamped  = getRampedMotion(lastMotion.x, forward , rampAmount, decelerationFactor) / speed;
+        double verticalRamped = getRampedMotion(lastMotion.y, vertical, rampAmount, decelerationFactor);
+        double strafeRamped   = getRampedMotion(lastMotion.z, strafe  , rampAmount, decelerationFactor) / speed;
+
+        if (sprinting)
+        {
+            forwardRamped *= 3.0;
+        }
+
+        return new Vec3d(forwardRamped, verticalRamped, strafeRamped);
+    }
+
+    public static double getRampedMotion(double current, double input, double rampAmount, double decelerationFactor)
+    {
+        if (input != 0.0)
+        {
+            if (input < 0.0)
+            {
+                rampAmount *= -1.0;
+            }
+
+            // Immediately kill the motion when changing direction to the opposite
+            if ((input < 0.0) != (current < 0.0))
+            {
+                current = 0.0;
+            }
+
+            current = MathHelper.clamp(current + rampAmount, -1.0, 1.0);
+        }
+        else
+        {
+            current *= decelerationFactor;
+        }
+
+        return current;
+    }
+
 
     public static boolean isZoomActive()
     {
