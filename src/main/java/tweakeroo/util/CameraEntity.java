@@ -2,6 +2,7 @@ package tweakeroo.util;
 
 import javax.annotation.Nullable;
 
+import malilib.util.position.Vec3d;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetHandlerPlayClient;
@@ -29,10 +30,9 @@ public class CameraEntity extends EntityPlayerSP
     @Nullable private static Entity originalRenderViewEntity;
     @Nullable private static CameraEntity camera;
     private static boolean cullChunksOriginal;
-    private static float forwardRamped;
-    private static float strafeRamped;
-    private static float verticalRamped;
     private static boolean sprinting;
+    private static net.minecraft.util.math.Vec3d cameraMotion = Vec3d.ZERO.toVanilla();
+
 
     @Override
     public boolean isSpectator()
@@ -47,73 +47,19 @@ public class CameraEntity extends EntityPlayerSP
         if (camera != null && Configs.Generic.FREE_CAMERA_PLAYER_MOVEMENT.getBooleanValue() == false)
         {
             camera.updateLastTickPosition();
-
-            float forward = 0;
-            float vertical = 0;
-            float strafe = 0;
-
             GameSettings options = GameWrap.getClient().gameSettings;
-            if (options.keyBindForward.isKeyDown()) { forward++;  }
-            if (options.keyBindBack.isKeyDown())    { forward--;  }
-            if (options.keyBindLeft.isKeyDown())    { strafe++;   }
-            if (options.keyBindRight.isKeyDown())   { strafe--;   }
-            if (options.keyBindJump.isKeyDown())    { vertical++; }
-            if (options.keyBindSneak.isKeyDown())   { vertical--; }
-
             if (options.keyBindSprint.isKeyDown())
             {
                 sprinting = true;
             }
-            else if (forward == 0)
+            else if (options.keyBindForward.isKeyDown() == false && options.keyBindBack.isKeyDown() == false)
             {
                 sprinting = false;
             }
 
-            float rampAmount = 0.15f;
-            float speed = strafe * strafe + forward * forward;
-
-            if (forward != 0 && strafe != 0)
-            {
-                speed = (float) Math.sqrt(speed * 0.6);
-            }
-            else
-            {
-                speed = 1;
-            }
-
-            forwardRamped  = getRampedMotion(forwardRamped , forward , rampAmount) / speed;
-            verticalRamped = getRampedMotion(verticalRamped, vertical, rampAmount);
-            strafeRamped   = getRampedMotion(strafeRamped  , strafe  , rampAmount) / speed;
-
-            forward = sprinting ? forwardRamped * 3 : forwardRamped;
-
-            camera.handleMotion(forward, verticalRamped, strafeRamped);
+            cameraMotion = MiscUtils.calculatePlayerMotionWithDeceleration(cameraMotion, 0.15, 0.4, sprinting);
+            camera.handleMotion((float) cameraMotion.x, cameraMotion.y, (float) cameraMotion.z);
         }
-    }
-
-    private static float getRampedMotion(float current, float input, float rampAmount)
-    {
-        if (input != 0)
-        {
-            if (input < 0)
-            {
-                rampAmount *= -1f;
-            }
-
-            // Immediately kill the motion when changing direction to the opposite
-            if ((input < 0) != (current < 0))
-            {
-                current = 0;
-            }
-
-            current = MathUtils.clamp(current + rampAmount, -1f, 1f);
-        }
-        else
-        {
-            current *= 0.5f;
-        }
-
-        return current;
     }
 
     private static double getMoveSpeed()
@@ -130,14 +76,17 @@ public class CameraEntity extends EntityPlayerSP
 
     private void handleMotion(float forward, double up, float strafe)
     {
-        double xFactor = Math.sin(EntityWrap.getYaw(this) * Math.PI / 180D);
-        double zFactor = Math.cos(EntityWrap.getYaw(this) * Math.PI / 180D);
+        float yaw = this.rotationYaw;
         double scale = getMoveSpeed();
 
-        this.motionX = (strafe * zFactor - forward * xFactor) * scale;
-        this.motionY = up * scale;
-        this.motionZ = (forward * zFactor + strafe * xFactor) * scale;
+        double xFactor = Math.sin(yaw * Math.PI / 180.0);
+        double zFactor = Math.cos(yaw * Math.PI / 180.0);
 
+        double x = (strafe * zFactor - forward * xFactor) * scale;
+        double y = up * scale;
+        double z = (forward * zFactor + strafe * xFactor) * scale;
+
+        this.setVelocity(x, y, z);
         this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 
         this.chunkCoordX = EntityWrap.getChunkX(this);

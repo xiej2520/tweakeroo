@@ -1,5 +1,6 @@
 package tweakeroo.mixin;
 
+import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,6 +15,8 @@ import net.minecraft.world.World;
 import malilib.util.game.wrap.GameWrap;
 import tweakeroo.config.Configs;
 import tweakeroo.config.DisableToggle;
+import tweakeroo.config.FeatureToggle;
+import tweakeroo.util.MiscUtils;
 
 @Mixin(EntityLivingBase.class)
 public abstract class MixinEntityLivingBase extends Entity
@@ -40,6 +43,17 @@ public abstract class MixinEntityLivingBase extends Entity
             GameWrap.getClient().gameSettings.thirdPersonView == 0)
         {
             ci.cancel();
+        }
+    }
+
+    @Inject(method = "onLivingUpdate", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/entity/EntityLivingBase;updateElytra()V"))
+    private void tweakeroo_applyCustomDeceleration(CallbackInfo ci)
+    {
+        if (FeatureToggle.TWEAK_CUSTOM_FLY_DECELERATION.getBooleanValue() &&
+            ((Entity) this) == Minecraft.getMinecraft().player)
+        {
+            MiscUtils.handlePlayerDeceleration();
         }
     }
 }
