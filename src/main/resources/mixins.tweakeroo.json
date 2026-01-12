@@ -4,6 +4,8 @@
 	"compatibilityLevel": "JAVA_8",
 	"minVersion": "0.8",
 	"client": [
+		"carefulbreak.MixinBlock",
+		"carefulbreak.MixinPlayerInteractionManager",
 		"render.model_override.BlockRendererDispatcherMixin",
 		"render.model_override.StateImplementationMixin",
 		"IMixinChunkRenderWorker",

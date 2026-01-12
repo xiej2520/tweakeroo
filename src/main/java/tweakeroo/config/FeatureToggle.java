@@ -31,6 +31,7 @@ public enum FeatureToggle implements ConfigInfo
     TWEAK_BREAKING_GRID                 ("tweakBreakingGrid",                       KeyBindSettings.INGAME_RELEASE),
     TWEAK_BREAKING_RESTRICTION          ("tweakBreakingRestriction",                KeyBindSettings.INGAME_RELEASE),
     TWEAK_BREAK_REPLACE                 ("tweakBreakReplace"),
+    TWEAK_CAREFUL_BREAK                 ("tweakCarefulBreak"),
     TWEAK_CHAT_BACKGROUND_COLOR         ("tweakChatBackgroundColor"),
     TWEAK_CHAT_PERSISTENT_TEXT          ("tweakChatPersistentText"),
     TWEAK_CHAT_TIMESTAMP                ("tweakChatTimestamp"),
