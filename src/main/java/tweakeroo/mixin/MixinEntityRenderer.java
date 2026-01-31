@@ -1,5 +1,8 @@
 package tweakeroo.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.minecraft.client.entity.EntityPlayerSP;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -200,5 +203,13 @@ public abstract class MixinEntityRenderer
     private void postSetupTerrain(int pass, float partialTicks, long finishTimeNano, CallbackInfo ci)
     {
         CameraUtils.setFreeCameraSpectator(false);
+    }
+
+    @WrapOperation(method = "renderWorldPass", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/entity/EntityPlayerSP;isSpectator()Z"))
+    private boolean noClipSeeWorld(EntityPlayerSP player, Operation<Boolean> original)
+    {
+        return FeatureToggle.TWEAK_CREATIVE_NO_CLIP.getBooleanValue() && player.isCreative() || original.call(player);
     }
 }
