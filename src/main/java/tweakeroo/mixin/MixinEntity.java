@@ -1,11 +1,12 @@
 package tweakeroo.mixin;
 
+import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import malilib.util.MathUtils;
@@ -17,10 +18,10 @@ import tweakeroo.util.CameraUtils;
 import tweakeroo.util.MiscUtils;
 import tweakeroo.util.SnapAimMode;
 
-@Mixin(net.minecraft.entity.Entity.class)
+@Mixin(Entity.class)
 public abstract class MixinEntity
 {
-    @Shadow public net.minecraft.world.World world;
+    @Shadow public World world;
 
     @Shadow public float rotationPitch;
     @Shadow public float rotationYaw;
@@ -30,20 +31,21 @@ public abstract class MixinEntity
     @Shadow public double motionY;
     @Shadow public double motionZ;
 
+    @Shadow private static double renderDistanceWeight;
     private double forcedPitch;
     private double forcedYaw;
 
     @Redirect(method = "move",
             slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;onGround:Z", ordinal = 0)),
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isSneaking()Z", ordinal = 0))
-    private boolean fakeSneaking(net.minecraft.entity.Entity entity)
+    private boolean fakeSneaking(Entity entity)
     {
-        if (FeatureToggle.TWEAK_FAKE_SNEAKING.getBooleanValue() && ((Object) this) instanceof net.minecraft.client.entity.EntityPlayerSP)
+        if (FeatureToggle.TWEAK_FAKE_SNEAKING.getBooleanValue() && ((Object) this) instanceof EntityPlayerSP)
         {
             return true;
         }
 
-        return ((net.minecraft.entity.Entity) (Object) this).isSneaking();
+        return ((Entity) (Object) this).isSneaking();
     }
 
     @Inject(method = "moveRelative",
@@ -51,7 +53,7 @@ public abstract class MixinEntity
                      target = "Lnet/minecraft/util/math/MathHelper;sin(F)F"), cancellable = true)
     private void moreAccurateMoveRelative(float strafe, float up, float forward, float friction, CallbackInfo ci)
     {
-        if ((Object) this instanceof net.minecraft.client.entity.EntityPlayerSP)
+        if ((Object) this instanceof EntityPlayerSP)
         {
             if (CameraUtils.shouldPreventPlayerMovement())
             {
@@ -76,7 +78,7 @@ public abstract class MixinEntity
                      target = "Lnet/minecraft/entity/Entity;prevRotationPitch:F", ordinal = 0))
     private void overrideYaw(float yawChange, float pitchChange, CallbackInfo ci)
     {
-        if ((Object) this instanceof net.minecraft.client.entity.EntityPlayerSP)
+        if ((Object) this instanceof EntityPlayerSP)
         {
             if (CameraUtils.shouldPreventPlayerMovement())
             {
@@ -154,6 +156,21 @@ public abstract class MixinEntity
         if (FeatureToggle.TWEAK_OUTLINE_ENTITIES.getBooleanValue())
         {
             cir.setReturnValue(true);
+        }
+    }
+
+    @Inject(method = "isInRangeToRenderDist", at = @At("RETURN"), cancellable = true)
+    private void overrideEntityRenderDistance(CallbackInfoReturnable<Boolean> cir, @Local(argsOnly = true) double distance)
+    {
+        if (FeatureToggle.TWEAK_ENTITY_RENDER_DISTANCE.getBooleanValue())
+        {
+            double d = ((Entity) (Object) this).getEntityBoundingBox().getAverageEdgeLength();
+            if (Double.isNaN(d)) {
+                d = 1.0;
+            }
+
+            d *= 64.0 * renderDistanceWeight * Configs.Generic.ENTITY_RENDER_DISTANCE.getDoubleValue();
+            cir.setReturnValue(distance < d * d);
         }
     }
 }

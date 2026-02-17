@@ -43,6 +43,7 @@ public enum FeatureToggle implements ConfigInfo
     TWEAK_CUSTOM_FLAT_PRESETS           ("tweakCustomFlatPresets"),
     TWEAK_CUSTOM_FLY_DECELERATION       ("tweakCustomFlyDeceleration"),
     TWEAK_DEBUG_PIE_CHART_SCALE         ("tweakDebugPieChartScale"),
+    TWEAK_ENTITY_RENDER_DISTANCE        ("tweakEntityRenderDistance"),
     TWEAK_ELYTRA_CAMERA                 ("tweakElytraCamera"),
     TWEAK_SHULKERBOX_STACKING           ("tweakEmptyShulkerBoxesStack"),
     TWEAK_SHULKERBOX_STACK_GROUND       ("tweakEmptyShulkerBoxesStackOnGround"),
