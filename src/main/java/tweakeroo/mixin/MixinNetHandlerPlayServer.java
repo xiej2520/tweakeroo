@@ -29,4 +29,41 @@ public abstract class MixinNetHandlerPlayServer
 
         return original;
     }
+
+    @ModifyConstant(method = "processPlayerDigging",
+        constant = @Constant(doubleValue = 36.0)
+    )
+    private double overrideDiggingReachDistance(double original)
+    {
+        if (FeatureToggle.TWEAK_BLOCK_REACH_OVERRIDE.getBooleanValue())
+        {
+            // creative block reach is 5, original is +1, +1 to be safe?
+            return (Configs.Generic.BLOCK_REACH_DISTANCE.getDoubleValue() + 1) * (Configs.Generic.BLOCK_REACH_DISTANCE.getDoubleValue() + 1);
+        }
+
+        return original;
+    }
+
+    @ModifyConstant(method = "processTryUseItemOnBlock",
+        constant = @Constant(doubleValue = 64.0)
+    )
+    private double overrideUseItemOnBlockReachDistance(double original)
+    {
+        if (FeatureToggle.TWEAK_BLOCK_REACH_OVERRIDE.getBooleanValue())
+        {
+            // creative block reach is 5, original is +3, +3 to be safe?
+            return (Configs.Generic.BLOCK_REACH_DISTANCE.getDoubleValue() + 3) * (Configs.Generic.BLOCK_REACH_DISTANCE.getDoubleValue() + 3);
+        }
+
+        return original;
+    }
+
+    // TODO: implement entity reach override
+    //@ModifyConstant(method = "processUseEntity",
+    //    constant = @Constant(doubleValue = 36.0)
+    //)
+    //private double overrideUseEntityBlockReachDistance(double original)
+    //{
+    //    return original;
+    //}
 }
