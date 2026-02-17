@@ -61,6 +61,7 @@ public class Configs
         public static final BooleanConfig CLIENT_PLACEMENT_ROTATION             = new BooleanConfig("clientPlacementRotation", true);
         public static final DoubleConfig  CLOUD_HEIGHT_OVERRIDE                 = new DoubleConfig( "cloudHeightOverride", 128, -1024, 1024);
         public static final DoubleConfig  DEBUG_PIE_CHART_SCALE                 = new DoubleConfig( "debugPieChartScale", 1, 0, 10);
+        public static final DoubleConfig  ENTITY_RENDER_DISTANCE                = new DoubleConfig( "entityRenderDistance", 1, 0.5, 5.0);
         public static final IntegerConfig FAST_BLOCK_PLACEMENT_COUNT            = new IntegerConfig("fastBlockPlacementCount", 2, 1, 16);
         public static final IntegerConfig FAST_LEFT_CLICK_COUNT                 = new IntegerConfig("fastLeftClickCount", 2, 1, 64);
         public static final BooleanConfig FAST_PLACEMENT_REMEMBER               = new BooleanConfig("fastPlacementRememberOrientation", true);
@@ -140,6 +141,7 @@ public class Configs
                 CLIENT_PLACEMENT_ROTATION,
                 CLOUD_HEIGHT_OVERRIDE,
                 DEBUG_PIE_CHART_SCALE,
+                ENTITY_RENDER_DISTANCE,
                 ELYTRA_CAMERA_INDICATOR,
                 FAST_BLOCK_PLACEMENT_COUNT,
                 FAST_LEFT_CLICK_COUNT,
