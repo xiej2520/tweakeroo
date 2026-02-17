@@ -50,7 +50,7 @@ public class Configs
         public static final HotkeyedBooleanConfig FREE_CAMERA_PLAYER_MOVEMENT           = new HotkeyedBooleanConfig("freeCameraPlayerMovement", false, "");
 
         public static final IntegerConfig AFTER_CLICKER_CLICK_COUNT             = new IntegerConfig("afterClickerClickCount", 1, 1, 64);
-        public static final DoubleConfig  BLOCK_REACH_DISTANCE                  = new DoubleConfig( "blockReachDistance", 4.5, 0, 8);
+        public static final DoubleConfig  BLOCK_REACH_DISTANCE                  = new DoubleConfig( "blockReachDistance", 4.5, 0, 64);
         public static final IntegerConfig BLOCK_BREAKING_PARTICLE_LIMIT         = new IntegerConfig("blockBreakingParticleLimit", 8, 1, 1024);
         public static final DoubleConfig  BLOCK_BREAKING_PARTICLE_SCALE         = new DoubleConfig( "blockBreakingParticleScale", 1.0, 0, 10D);
         public static final DoubleConfig  BLOCK_BREAKING_PARTICLE_SPEED         = new DoubleConfig( "blockBreakingParticleSpeedMultiplier", 1.0, 0, 20D);

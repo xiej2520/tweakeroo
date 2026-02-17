@@ -4,10 +4,6 @@
 	"compatibilityLevel": "JAVA_8",
 	"minVersion": "0.8",
 	"client": [
-		"carefulbreak.MixinBlock",
-		"carefulbreak.MixinPlayerInteractionManager",
-		"render.model_override.BlockRendererDispatcherMixin",
-		"render.model_override.StateImplementationMixin",
 		"IMixinChunkRenderWorker",
 		"IMixinCommandBlockBaseLogic",
 		"IMixinFlatGeneratorInfo",
@@ -73,7 +69,19 @@
 		"MixinWorld",
 		"MixinWorldClient",
 		"MixinWorldProvider",
-		"MixinWorldProviderHell"
+		"MixinWorldProviderHell",
+		"block_reach_override.MixinContainerEnchantment",
+		"block_reach_override.MixinContainerRepair",
+		"block_reach_override.MixinContainerWorkbench",
+		"block_reach_override.MixinInventoryPlayer",
+		"block_reach_override.MixinTileEntityBeacon",
+		"block_reach_override.MixinTileEntityBrewingStand",
+		"block_reach_override.MixinTileEntityFurnace",
+		"block_reach_override.MixinTileEntityLockableLoot",
+		"carefulbreak.MixinBlock",
+		"carefulbreak.MixinPlayerInteractionManager",
+		"render.model_override.BlockRendererDispatcherMixin",
+		"render.model_override.StateImplementationMixin"
 	],
 	"mixinPriority": 990,
 	"injectors": {
