@@ -47,6 +47,7 @@
     "MixinGlStateManager",
     "MixinHeldItemRenderer",
     "MixinInGameHud",
+    "MixinInGameOverlayRenderer",
     "MixinItem",
     "MixinItemGroup",
     "MixinItemStack",
