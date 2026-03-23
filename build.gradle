@@ -1,6 +1,6 @@
 plugins {
-	id 'fabric-loom' version '1.10-SNAPSHOT'
-	id 'ploceus' version '1.10-SNAPSHOT'
+	id 'fabric-loom' version '1.15-SNAPSHOT'
+	id 'ploceus' version '1.15-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -30,15 +30,14 @@ repositories {
 	mavenLocal()
 }
 
+ploceus {
+	setIntermediaryGeneration(2)
+}
+
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 
 	mappings(ploceus.mcpMappings("stable", "1.12", "39"))
-	//mappings loom.layered {
-	//	addLayer ploceus.mcpMappings('stable', '1.12', '39')
-	//	//mappings "net.ornithemc:feather:${project.minecraft_version}+build.${project.feather_build}:v2"
-	//	//addLayer ploceus.nestedMappings() // remove this line if not using nests
-	//}
 	//nests "net.ornithemc:nests:${project.minecraft_version}+build.${project.nests_build}" // remove this line if not using nests
 
 	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
@@ -116,7 +115,7 @@ tasks.publish.dependsOn build
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
-			artifactId project.archivesBaseName
+			artifactId = base.archivesName.get()
 
 			// add all the jars that should be included when publishing to maven
 			//artifact(jar) { builtBy remapJar }
