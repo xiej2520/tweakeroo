@@ -27,6 +27,10 @@ repositories {
 	mavenLocal()
 }
 
+ploceus {
+	setIntermediaryGeneration(2)
+}
+
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 
