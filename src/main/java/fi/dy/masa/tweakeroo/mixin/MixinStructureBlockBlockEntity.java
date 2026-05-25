@@ -102,14 +102,15 @@ public abstract class MixinStructureBlockBlockEntity extends BlockEntity
         }
     }
 
-    @Override
-    public double getSquaredRenderDistance()
-    {
-        if (FeatureToggle.TWEAK_STRUCTURE_BLOCK_LIMIT.getBooleanValue())
-        {
-            return 65536.0D;
-        }
+    // this conflicts with TIS carpet now, just disable it here
+    //@Override
+    //public double getSquaredRenderDistance()
+    //{
+    //    if (FeatureToggle.TWEAK_STRUCTURE_BLOCK_LIMIT.getBooleanValue())
+    //    {
+    //        return 65536.0D;
+    //    }
 
-        return super.getSquaredRenderDistance();
-    }
+    //    return super.getSquaredRenderDistance();
+    //}
 }
