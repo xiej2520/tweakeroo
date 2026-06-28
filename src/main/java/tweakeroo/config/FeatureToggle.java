@@ -95,6 +95,9 @@ public enum FeatureToggle implements ConfigInfo
     TWEAK_RENDER_LIMIT_ENTITIES         ("tweakRenderLimitEntities"),
     TWEAK_REPAIR_MODE                   ("tweakRepairMode"),
     TWEAK_SHULKERBOX_DISPLAY            ("tweakShulkerBoxDisplay"),
+    // from tweakermore, Fallen_Breath
+    TWEAK_SHULKER_BOX_ITEM_CONTENT_HINT ("tweakShulkerBoxItemContentHint"),
+    // end
     TWEAK_SIGN_COPY                     ("tweakSignCopy"),
     TWEAK_SNAP_AIM                      ("tweakSnapAim",                            KeyBindSettings.INGAME_RELEASE),
     TWEAK_SNAP_AIM_LOCK                 ("tweakSnapAimLock"),
