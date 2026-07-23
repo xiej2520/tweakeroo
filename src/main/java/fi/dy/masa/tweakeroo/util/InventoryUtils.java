@@ -827,7 +827,9 @@ public class InventoryUtils
 
         for (Slot slot : containerPlayer.slots)
         {
-            if (slot.hasStack() && isConfiguredRepairSlot(slot.id, player) == false)
+            if (slot.hasStack() && isConfiguredRepairSlot(slot.id, player) == false
+                && slot.canInsert(targetSlot.getStack())
+            )
             {
                 ItemStack stack = slot.getStack();
 
@@ -1030,9 +1032,14 @@ public class InventoryUtils
     {
         MinecraftClient mc = MinecraftClient.getInstance();
         Container container = player.container;
-        mc.interactionManager.clickSlot(container.syncId, slotNum, 0, SlotActionType.SWAP, player);
-        mc.interactionManager.clickSlot(container.syncId, otherSlot, 0, SlotActionType.SWAP, player);
-        mc.interactionManager.clickSlot(container.syncId, slotNum, 0, SlotActionType.SWAP, player);
+        int hotbarSlot = 0;
+        while (36 + hotbarSlot == slotNum || 36 + hotbarSlot == otherSlot) {
+            ++hotbarSlot;
+        }
+
+        mc.interactionManager.clickSlot(container.syncId, slotNum, hotbarSlot, SlotActionType.SWAP, player);
+        mc.interactionManager.clickSlot(container.syncId, otherSlot, hotbarSlot, SlotActionType.SWAP, player);
+        mc.interactionManager.clickSlot(container.syncId, slotNum, hotbarSlot, SlotActionType.SWAP, player);
     }
 
     private static void swapToolToHand(int slotNumber, MinecraftClient mc)
