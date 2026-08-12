@@ -163,10 +163,15 @@ public abstract class MixinClientPlayerInteractionManager
             if (trace != null && trace.getType() == HitResult.Type.BLOCK) {
                 for (Hand hand : Hand.values()) {
                     ItemStack stack = this.client.player.getStackInHand(hand);
+                    ItemStack originalStack = stack.copy();
                     if (stack != null
                         && Item.BLOCK_ITEMS.containsValue(stack.getItem())
                         && this.interactBlock(this.client.player, this.client.world, hand, (BlockHitResult) trace).isAccepted()) {
                         this.blockBreakingCooldown = 5;
+                        if (FeatureToggle.TWEAK_HAND_RESTOCK.getBooleanValue())
+                        {
+                            PlacementTweaks.tryRestockHand(this.client.player, hand, originalStack);
+                        }
                         return;
                     }
                 }
