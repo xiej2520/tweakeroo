@@ -214,7 +214,11 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     {
         if (this.realInput != null)
         {
-            this.input = this.realInput;
+            if (this.input == this.dummyMovementInput)
+            {
+                this.input = this.realInput;
+            }
+
             this.realInput = null;
         }
     }
