@@ -268,7 +268,7 @@ public class PlacementTweaks
 
                     hitVec = hitVecFirst.add(posNew.getX(), posNew.getY(), posNew.getZ());
                     ActionResult result = tryPlaceBlock(mc.interactionManager, player, mc.world,
-                            posNew, sideFirst, sideRotatedFirst, playerYawFirst, hitVec, hand, hitPartFirst, false);
+                            posNew, sideFirst, sideRotatedFirst, playerYawFirst, hitVec, hand, hitPartFirst, false, false);
 
                     if (result == ActionResult.SUCCESS)
                     {
@@ -358,7 +358,7 @@ public class PlacementTweaks
         }
 
         //System.out.printf("onProcessRightClickBlock() pos: %s, side: %s, part: %s, hitVec: %s\n", posIn, sideIn, hitPart, hitVec);
-        ActionResult result = tryPlaceBlock(controller, player, world, posIn, sideIn, sideRotated, player.yaw, hitVec, hand, hitPart, true);
+        ActionResult result = tryPlaceBlock(controller, player, world, posIn, sideIn, sideRotated, player.yaw, hitVec, hand, hitPart, true, hitResult.isInsideBlock());
 
         // Store the initial click data for the fast placement mode
         if (posFirst == null && result == ActionResult.SUCCESS && restricted)
@@ -400,7 +400,8 @@ public class PlacementTweaks
             Vec3d hitVec,
             Hand hand,
             HitPart hitPart,
-            boolean isFirstClick)
+            boolean isFirstClick,
+            boolean hitInside)
     {
         Direction side = sideIn;
         boolean handleFlexible = false;
@@ -571,7 +572,7 @@ public class PlacementTweaks
             }
 
             //System.out.printf("accurate - facing: %s, side: %s, posNew: %s, hit: %s\n", facing, side, posNew, hitVec);
-            return processRightClickBlockWrapper(controller, player, world, posNew, side, hitVec, hand);
+            return processRightClickBlockWrapper(controller, player, world, posNew, side, hitVec, hand, false);
         }
 
         if (handleFlexible)
@@ -595,7 +596,7 @@ public class PlacementTweaks
             return handleFlexibleBlockPlacement(controller, player, world, posIn, sideIn, playerYaw, hitVec, hand, null);
         }
 
-        return processRightClickBlockWrapper(controller, player, world, simpleOffset ? posNew : posIn, sideIn, hitVec, hand);
+        return processRightClickBlockWrapper(controller, player, world, simpleOffset ? posNew : posIn, sideIn, hitVec, hand, hitInside);
     }
 
     private static boolean canPlaceBlockAgainst(World world, BlockPos pos, PlayerEntity player, Hand hand)
@@ -699,7 +700,8 @@ public class PlacementTweaks
             BlockPos posIn,
             Direction sideIn,
             Vec3d hitVecIn,
-            Hand hand)
+            Hand hand,
+            boolean hitInside)
     {
         //System.out.printf("processRightClickBlockWrapper() start @ %s, side: %s, hand: %s\n", pos, side, hand);
         if (FeatureToggle.TWEAK_PLACEMENT_LIMIT.getBooleanValue() &&
@@ -809,7 +811,7 @@ public class PlacementTweaks
         else
         {
             //System.out.printf("processRightClickBlockWrapper() PLACE @ %s, side: %s, hit: %s\n", pos, side, hitVec);
-            BlockHitResult context = new BlockHitResult(hitVecIn, sideIn, posIn, false);
+            BlockHitResult context = new BlockHitResult(hitVecIn, sideIn, posIn, hitInside);
             result = controller.interactBlock(player, world, hand, context);
         }
 
@@ -889,7 +891,7 @@ public class PlacementTweaks
         player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(player.yaw, player.pitch, player.onGround));
 
         //System.out.printf("handleFlexibleBlockPlacement() pos: %s, side: %s, facing orig: %s facing new: %s\n", pos, side, facingOrig, facing);
-        ActionResult result = processRightClickBlockWrapper(controller, player, world, pos, side, hitVec, hand);
+        ActionResult result = processRightClickBlockWrapper(controller, player, world, pos, side, hitVec, hand, false);
 
         player.yaw = yawOrig;
         player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(player.yaw, player.pitch, player.onGround));
