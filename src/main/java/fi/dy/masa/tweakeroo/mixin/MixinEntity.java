@@ -64,6 +64,8 @@ public abstract class MixinEntity
             if (CameraUtils.shouldPreventPlayerMovement())
             {
                 CameraUtils.updateCameraRotations((float) yawChange, (float) pitchChange);
+                ci.cancel();
+                return;
             }
 
             if (FeatureToggle.TWEAK_ELYTRA_CAMERA.getBooleanValue() && Hotkeys.ELYTRA_CAMERA.getKeybind().isKeybindHeld())
@@ -122,12 +124,6 @@ public abstract class MixinEntity
                 this.prevPitch = this.pitch;
                 ci.cancel();
 
-                return;
-            }
-
-            if (CameraUtils.shouldPreventPlayerMovement())
-            {
-                ci.cancel();
                 return;
             }
 
