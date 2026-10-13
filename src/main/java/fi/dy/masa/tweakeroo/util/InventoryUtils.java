@@ -649,6 +649,11 @@ public class InventoryUtils
             }
         }
 
+        if (state.getMaterial().canBreakByHand() == false && stack.isEffectiveOn(state) == false)
+        {
+            speed /= (100F / 30F);
+        }
+
         return speed;
     }
 
