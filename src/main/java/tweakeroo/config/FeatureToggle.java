@@ -50,6 +50,7 @@ public enum FeatureToggle implements ConfigInfo
     TWEAK_EXPLOSION_REDUCED_PARTICLES   ("tweakExplosionReducedParticles"),
     TWEAK_F3_CURSOR                     ("tweakF3Cursor"),
     TWEAK_FAKE_SNEAKING                 ("tweakFakeSneaking"),
+    TWEAK_FALLING_BLOCK_TRUE_SIZE       ("tweakFallingBlockTrueSize"),
     TWEAK_FAST_BLOCK_PLACEMENT          ("tweakFastBlockPlacement",                 KeyBindSettings.INGAME_RELEASE),
     TWEAK_FAST_LEFT_CLICK               ("tweakFastLeftClick",                      KeyBindSettings.INGAME_RELEASE),
     TWEAK_FAST_RIGHT_CLICK              ("tweakFastRightClick",                     KeyBindSettings.INGAME_RELEASE),
