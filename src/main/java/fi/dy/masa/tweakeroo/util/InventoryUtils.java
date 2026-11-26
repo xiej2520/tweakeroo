@@ -10,6 +10,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import fi.dy.masa.tweakeroo.mixin.IMixinMiningToolItem;
@@ -540,51 +541,89 @@ public class InventoryUtils
         return EnchantmentHelper.getLevel(enchantment, stack);
     }
 
+    // Ported rules form upstream's `isBetterTool`, for current 1.15.2 rules
     private static boolean isBetterTool(ItemStack testedStack, ItemStack previousTool, BlockState state)
     {
-        if (previousTool.isEmpty())
-        {
-            return true;
-        }
+        final boolean isBamboo = state.getBlock() == Blocks.BAMBOO;
+        final boolean preferSilkTouch = PREFER_SILK_TOUCH.contains(Registry.BLOCK.getId(state.getBlock()).toString());
+        List<Supplier<Boolean>> rules = new ArrayList<>();
 
-        if (state.getBlock() == Blocks.BAMBOO)
-        {
-            if (testedStack.getItem() instanceof SwordItem)
-            {
-                return true;
-            }
-            else if (previousTool.getItem() instanceof SwordItem)
-            {
-                return false;
-            }
-        }
+        // Never switch to an empty slot
+        rules.add(() -> testedStack.isEmpty() ? Boolean.FALSE : null);
 
-        if (testedStack.isEmpty() == false)
+        // No tool helps with this block (torches, flowers, ...), so there is no reason to switch
+        rules.add(() -> isBamboo || preferSilkTouch || isHelpfulTool(testedStack, state) ? null : Boolean.FALSE);
+
+        // Any sword is better than no sword for bamboo
+        rules.add(() ->
         {
-            if (PREFER_SILK_TOUCH.contains(Registry.BLOCK.getId(state.getBlock()).toString()))
+            if (isBamboo == false)
             {
-                if (getEnchantmentLevel(testedStack, Enchantments.SILK_TOUCH) > 0 &&
-                    getEnchantmentLevel(previousTool, Enchantments.SILK_TOUCH) <= 0 &&
-                    testedStack.isEffectiveOn(state))
-                {
-                    return true;
-                }
+                return null;
             }
 
-            if (getBaseBlockBreakingSpeed(testedStack, state) > getBaseBlockBreakingSpeed(previousTool, state))
+            boolean tested = testedStack.getItem() instanceof SwordItem;
+            boolean previous = previousTool.getItem() instanceof SwordItem;
+            return tested != previous ? tested : null;
+        });
+
+        // Silk touch for the preferSilkTouch blocks
+        rules.add(() ->
+        {
+            if (preferSilkTouch == false)
             {
-                return true;
+                return null;
             }
-            else if (getBaseBlockBreakingSpeed(testedStack, state) == getBaseBlockBreakingSpeed(previousTool, state))
+
+            boolean tested = getEnchantmentLevel(testedStack, Enchantments.SILK_TOUCH) > 0 && testedStack.isEffectiveOn(state);
+            boolean previous = getEnchantmentLevel(previousTool, Enchantments.SILK_TOUCH) > 0 && previousTool.isEffectiveOn(state);
+            return tested != previous ? tested : null;
+        });
+
+        // The correct tool (one that gets the drops) first
+        rules.add(() ->
+        {
+            boolean tested = testedStack.isEffectiveOn(state);
+            boolean previous = previousTool.isEffectiveOn(state);
+            return tested != previous ? tested : null;
+        });
+
+        // The faster tool
+        rules.add(() ->
+        {
+            float tested = getBaseBlockBreakingSpeed(testedStack, state);
+            float previous = getBaseBlockBreakingSpeed(previousTool, state);
+            return tested > previous ? Boolean.TRUE : (tested < previous ? Boolean.FALSE : null);
+        });
+
+        // Same speed: better enchantments and rarity
+        rules.add(() ->
+        {
+            if (Configs.Generic.TOOL_SWAP_BETTER_ENCHANTS.getBooleanValue() == false || previousTool.isEmpty())
             {
-                if (Configs.Generic.TOOL_SWAP_BETTER_ENCHANTS.getBooleanValue())
-                {
-                    return hasTheSameOrBetterRarity(testedStack, previousTool) && hasSameOrBetterToolEnchantments(testedStack, previousTool);
-                }
+                return null;
+            }
+
+            return hasTheSameOrBetterRarity(testedStack, previousTool) && hasSameOrBetterToolEnchantments(testedStack, previousTool);
+        });
+
+        for (Supplier<Boolean> rule : rules)
+        {
+            Boolean result = rule.get();
+
+            if (result != null)
+            {
+                return result;
             }
         }
 
         return false;
+    }
+
+    private static boolean isHelpfulTool(ItemStack stack, BlockState state)
+    {
+        return stack.isEffectiveOn(state) ||
+               getBaseBlockBreakingSpeed(stack, state) > getBaseBlockBreakingSpeed(ItemStack.EMPTY, state);
     }
 
     private static boolean isBetterToolAndHasDurability(ItemStack testedStack, ItemStack previousTool, BlockState state)
