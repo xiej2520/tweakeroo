@@ -36,7 +36,8 @@
 
     "depends": {
       "minecraft": "1.15.2",
-        "malilib": ">=0.18.1-dev.39+xiej"
+        "malilib": ">=0.18.5+xiej",
+        "fabricloader": ">=0.15.0"
     },
 
     "custom": {
